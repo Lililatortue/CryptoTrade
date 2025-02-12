@@ -1,0 +1,56 @@
+/**-- css POUR PAGE INDEX --**/
+
+.pageContainer
+{
+    /* centre la page, en absolut */
+    position: absolute;
+    left: 48%;
+    /* Fonction AUTO-CENTRER quand on resize la fenetre */
+    transform: translateX(-50%);
+}
+
+h1
+{
+    color:purple; 
+    /*Centrer dans le .pageContainer*/
+    margin-left: 48%;
+}
+
+/** left-side **/
+#page_LoGo
+{
+    width: 640px; /* Split en 2 (1080 pixels de l'ecran) */
+    height: 500px;
+    /* (commence avec opacite de 0[%], et va doucmenet vers 1 [100%]) */
+    opacity: 0; /* quand la page se load, commence a 0 */
+
+    /** Animation Specs **/
+    animation: ImgShow 2s ease; /* durée de 2 secondes */
+    animation-fill-mode: forwards; /* animation != Loop all the fking time */
+}
+@keyframes ImgShow /*qui dure 2 secondes */
+{
+   100% { opacity: 1.0;} /* animation va vers 1.0 [100% image] */
+}
+ 
+/** right-side **/
+button
+{
+    /* button size */
+    height: 50px;
+    width: 150px;
+    /* lettres + couleurs */
+    font-size: large;
+    font-weight: bold;
+    background-color: silver;
+    border-radius: 5px;
+}
+button:hover
+{
+    background-color: darkgray;
+    cursor: pointer; /* Changer au cursor Main*/
+}
+button:active
+{
+    background-color: gray;
+}
