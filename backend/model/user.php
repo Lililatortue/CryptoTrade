@@ -4,8 +4,9 @@ include "../dbdata/dBConnection.php";
 include "config.php"; 
 
 function findOneUser($data){
-    $db=new DatabaseConnection();
+    
     try{
+        $db=new DatabaseConnection();
         $stmt = $db -> prepare( "SELECT * FROM user WHERE id=:id" );
         $stmt -> execute([":id"=>$data['id']]);
         $user=$stmt->fetch(PDO::FETCH_ASSOC);
@@ -23,8 +24,7 @@ function findOneUser($data){
     }
 }
 
-function fetchAllUser(){
-        
+function fetchAllUser(){      
     try{
         $db=new DatabaseConnection();
         $stmt=$db -> prepare( "SELECT * FROM user");
@@ -45,11 +45,13 @@ function fetchAllUser(){
 }
 
 function createUser($data){
-    $db=new DatabaseConnection();
+    
     try{
-        $stmt = $db -> prepare("INSERT INTO user(username, pays, age, role) 
-                                    VALUES (:username, :pays, :age, guest)");
-        $bool=$stmt -> execute([":username"=> $data['username'], ":pays"=>$data['pays'],":age"=>$data['age']]);
+        $db=new DatabaseConnection();
+        $stmt = $db -> prepare("INSERT INTO user(username, email pays, age, role) 
+                                    VALUES (:username,:email, :pays, :age, guest)");
+        $bool=$stmt -> execute([":username" => $data['username'], ":email" => $data['email'], 
+                                ":pays" =>$data['pays'],":age" => $data['age']]);
     } catch(Exception $e){
         //error handling server error
         http_response_code(500);
@@ -65,10 +67,12 @@ function createUser($data){
 }
 //a modifier car il faut toute les parametre pour quelle fonctionne
 function updateUser($data){
-    $db=new DatabaseConnection();
+    
     try{
-        $stmt = $db -> prepare("UPDATE user SET username=:username, pays=:pays, age=:age WHERE id=:id");
+        $db=new DatabaseConnection();
+        $stmt = $db -> prepare("UPDATE user SET username=:username, email=:email, pays=:pays, age=:age WHERE id=:id");
         $bool = $stmt -> execute([":username" => $data["username"], 
+                                  ":email" => $data["email"],
                                   ":pays" => $data["pays"],
                                   ":age" => $data["age"]]);
     } catch(Exception $e){
