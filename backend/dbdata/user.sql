@@ -1,8 +1,9 @@
 create table user(
     id VARCHAR PRIMARY KEY,
     username VARCHAR not null,
+    email VARCHAR unique not null,
     pays VARCHAR not null,
-    age VARCHAR not null   
+    age VARCHAR not null
 );
 create table crypto(
     id VARCHAR PRIMARY KEY,
