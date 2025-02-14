@@ -5,11 +5,13 @@ header("Content-Type: application/json");
 
 $methods = $_SERVER['REQUEST_METHOD'];
 $uri = strtok($_SERVER['REQUEST_URI'], '?');
-$basePath = "/backend/controller/routing.php"; // Adjust if needed
+
+$basePath = "/backend/controller/routing.php";
 if (strpos($uri, $basePath) === 0) {
     $uri = substr($uri, strlen($basePath));
 }
-$param=empty($_GET) ? (empty($_POST) ?  null :$_POST ) : $_GET;
+
+$param=empty($_GET) ? (empty($_POST) ?  null : $_POST ) : $_GET;
 
 //use est un capture dans ce context c'est inutile de l'utiliser mais j'aime  comment sa ressemble
 $action = function($data) use($methods,$uri){
