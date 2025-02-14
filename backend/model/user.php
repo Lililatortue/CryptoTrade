@@ -6,7 +6,7 @@ include "config.php";
 function findOneUser($data){
     
     try{
-        $db=new DatabaseConnection();
+        $db=DatabaseConnection::getInstance();
         $stmt = $db -> prepare( "SELECT * FROM user WHERE id=:id" );
         $stmt -> execute([":id"=>$data['id']]);
         $user=$stmt->fetch(PDO::FETCH_ASSOC);
@@ -26,7 +26,7 @@ function findOneUser($data){
 
 function fetchAllUser(){      
     try{
-        $db=new DatabaseConnection();
+        $db= DatabaseConnection::getInstance();
         $stmt=$db -> prepare( "SELECT * FROM user");
         $stmt -> execute();
         //sa retourne une list de user
@@ -47,15 +47,15 @@ function fetchAllUser(){
 function createUser($data){
     
     try{
-        $db=new DatabaseConnection();
-        $stmt = $db -> prepare("INSERT INTO user(username, email pays, age, role) 
-                                    VALUES (:username,:email, :pays, :age, guest)");
+        $db= DatabaseConnection::getInstance();
+        $stmt = $db -> prepare("INSERT INTO user(username, email, pays, age) 
+                                    VALUES (:username,:email, :pays, :age)");
         $bool=$stmt -> execute([":username" => $data['username'], ":email" => $data['email'], 
                                 ":pays" =>$data['pays'],":age" => $data['age']]);
     } catch(Exception $e){
         //error handling server error
         http_response_code(500);
-        return ["erreur: erreur logique fetchAllUser."];
+        return ["erreur: erreur logique create.".$e->getMessage()];
     }
     if($bool){
         http_response_code(200);
@@ -67,11 +67,12 @@ function createUser($data){
 }
 //a modifier car il faut toute les parametre pour quelle fonctionne
 function updateUser($data){
-    
+    //bad error handling
     try{
-        $db=new DatabaseConnection();
+        $db= DatabaseConnection::getInstance();
         $stmt = $db -> prepare("UPDATE user SET username=:username, email=:email, pays=:pays, age=:age WHERE id=:id");
-        $bool = $stmt -> execute([":username" => $data["username"], 
+        $bool = $stmt -> execute([":id" => $data["id"],
+                                  ":username" => $data["username"], 
                                   ":email" => $data["email"],
                                   ":pays" => $data["pays"],
                                   ":age" => $data["age"]]);
@@ -90,7 +91,7 @@ function updateUser($data){
 }
 
 function deleteUser($data){
-    $db=new DatabaseConnection();
+    $db= DatabaseConnection::getInstance();
     try{
         $stmt = $db -> prepare("DELETE FROM user WHERE id=:id");
         $bool = $stmt -> execute(["id"=>$data['id']]);     
