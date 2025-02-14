@@ -1,18 +1,21 @@
 <?php
-require config.php;
 
 class DatabaseConnection{
-    private $connection;
+    private static $connection;
 
-    public __construct(){
+    public function __construct(){
         if(self::$connection==null){
-            $data_source="mysql:host=".host.";dbname=" . database_name . ";charset=utf8mb4";
-            self::$connection_string=new PDO($data_source,username,password); 
+            try{
+                $data_source="mysql:host=".host.";dbname=" . database_name . ";charset=utf8mb4";
+                self::$connection_string=new PDO($data_source,username,password);
+            } catch (PDOException $e) {
+                throw new PDOException("Database connection failed: " . $e->getMessage());
+            } 
         }
          
     }
     
-    public getConnection(){
+    public function getConnection(){
         return $this->$connection;
     }
 }

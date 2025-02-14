@@ -1,6 +1,6 @@
 
 <?php
-include "./db data/dBConnection.php";
+include "../dbdata/dBConnection.php";
 include "config.php"; 
 
 function findOneUser($data){
@@ -24,20 +24,20 @@ function findOneUser($data){
 }
 
 function fetchAllUser(){
-    $db=new DatabaseConnection();
+        
     try{
+        $db=new DatabaseConnection();
         $stmt=$db -> prepare( "SELECT * FROM user");
-        $stmt -> execute()
+        $stmt -> execute();
         //sa retourne une list de user
-        $users=$stmt->fetch(PDO::FETCH_ASSOC);
-    } catch(Exception $e) {
-        //error handling server error
+        $users=$stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch(PDOException $e){
         http_response_code(500);
-        return ["erreur: erreur logique fetchAllUser"];
+        return ["erreur: impossible d'etablir une connection avec la database."];
     }
     if($users){
         http_response_code(200);
-        return $users;
+        return [$users];
     } else {
         http_response_code(204);//204 est retourne quand la requete a reussi mais aucun contenu est retourner
         return ["no data found"];
@@ -67,7 +67,6 @@ function createUser($data){
 function updateUser($data){
     $db=new DatabaseConnection();
     try{
-        
         $stmt = $db -> prepare("UPDATE user SET username=:username, pays=:pays, age=:age WHERE id=:id");
         $bool = $stmt -> execute([":username" => $data["username"], 
                                   ":pays" => $data["pays"],
@@ -79,10 +78,10 @@ function updateUser($data){
 
     if($bool){
         http_response_code(200);
-        return ["utilisateur changer avec succes."]
+        return ["utilisateur changer avec succes."];
     } else {
         http_response_code(400);
-        return ["un erreur est survenu durant la mise a jour de l'utilisateur."]
+        return ["un erreur est survenu durant la mise a jour de l'utilisateur."];
     }
 }
 
@@ -91,21 +90,17 @@ function deleteUser($data){
     try{
         $stmt = $db -> prepare("DELETE FROM user WHERE id=:id");
         $bool = $stmt -> execute(["id"=>$data['id']]);     
-    } catch (Exeception e) {
+    } catch (Exeception $e) {
         http_response_code(500);
         return ["erreur: erreur logique deleteUser."];
     }
-
     if($bool){
         http_response_code(200);
-        return ["utilisateur efface avec succes"]
+        return ["utilisateur efface avec succes"];
     } else {
         http_response_code(400);
-        return ["un erreur est survenu durant l'effacement de l'utilisateur."]
+        return ["un erreur est survenu durant l'effacement de l'utilisateur."];
     }
 }
 
-function login(){
-    
-}
 ?>

@@ -1,15 +1,20 @@
-<?php
 
+<?php
+include "../model/user.php";
 header("Content-Type: application/json");
 
 $methods = $_SERVER['REQUEST_METHOD'];
-$url = strtok($_SERVER['REQUEST_URI'], '?');
-
+$uri = strtok($_SERVER['REQUEST_URI'], '?');
+$basePath = "/backend/controller/routing.php"; // Adjust if needed
+if (strpos($uri, $basePath) === 0) {
+    $uri = substr($uri, strlen($basePath));
+}
 $param=empty($_GET) ? (empty($_POST) ?  null :$_POST ) : $_GET;
 
 //use est un capture dans ce context c'est inutile de l'utiliser mais j'aime  comment sa ressemble
-$action = function($data) use($methods,$url){
-    $route = "$methods$url";
+$action = function($data) use($methods,$uri){
+    $route = "$methods$uri";
+    echo $route;
     switch($route){
         //route user
         case "POST/user/add": return createUser($data);
@@ -21,7 +26,7 @@ $action = function($data) use($methods,$url){
 
         default: {http_response_code(404); return ["erreur, route non-existante"];}//bad request;
     }
-}
+};
 
-return json_encode($action($param));
+echo json_encode($action($param));
 ?>
