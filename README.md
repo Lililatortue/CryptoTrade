@@ -12,9 +12,16 @@ aderer au principe SOLID
 - [ ] implimentation d'un 2FA Google ou email.
 - [ ] implimentation d'un systeme d'invitation.
 
+## information trouver
+
+
 # Gestion de crypto-monnaies
 - [ ] Le super admin peut ajouter de nouvelles crypto-monnaies à la plateforme (nom, symbole, prix initial)
 - [ ] Stockage des informations sur chaque crypto-monnaie dans la base de données.
 - [ ] Consultation de la liste des crypto-monnaies disponibles par tous les utilisateurs.
+
+## information trouver
+
+
 
 
