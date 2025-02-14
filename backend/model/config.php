@@ -1,6 +1,6 @@
 <?php
 const host="localhost";
-const database_name="CryptoTradeUserDB";
+const database_name="cryptotradedb";
 const username="root";
 const password="";
 ?>
