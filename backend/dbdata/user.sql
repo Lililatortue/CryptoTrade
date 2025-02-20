@@ -1,10 +1,13 @@
 create table user(
-     id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(100) not null,
     email VARCHAR(150) unique not null,
     pays VARCHAR(50) not null,
-    age INT not null
+    age INT not null,
+    password VARCHAR(150) not null,
+    salt BINARY(16) not null
 );
+
 create table crypto(
     id VARCHAR PRIMARY KEY,
     quantite NUMBER not null,
