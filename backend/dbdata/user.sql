@@ -9,10 +9,11 @@ create table user(
 );
 
 create table crypto(
-    id VARCHAR PRIMARY KEY,
-    quantite NUMBER not null,
-    valeur NUMBER not null,
-    image NUMBER not null
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    crypto_name Varchar(100) not null,
+    quantite NUMBER(1000) not null,
+    valeur NUMBER(1000) not null,
+    image varchar(1000) not null
 );
 
 --junction table
