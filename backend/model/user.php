@@ -53,8 +53,7 @@ function createUser($data){
     
     try{
         $db= DatabaseConnection::getInstance();
-
-        //salt and hash pssword
+        //salt and hash password
         $salt = base64_encode(random_bytes(16));
         $iterations = 600000;
         $hash = hash_pbkdf2("sha256",$data['password'],$salt,$iterations,20);
@@ -134,14 +133,14 @@ function login($data){
     }
 }
 
- function createString($data){
+function createString($data){
     $usedData=$data;
     unset($usedData['email']);
     $columns = implode(", ", array_map(fn($key) => "$key = :$key", array_keys($data)));
     
     return "UPDATE user SET $columns WHERE email = :email";
- }
- function createExecute($data){
+}
+function createExecute($data){
     $query=[];
     foreach($data as $key=>$value){
         $query[":".$key]=$value;
