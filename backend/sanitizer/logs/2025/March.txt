@@ -1,0 +1,90 @@
+DAY: [ 05 23:10:50 ]
+	IP: 127.0.0.1
+	TYPE: APICALLS
+	WEB BROWSER: PostmanRuntime/7.43.0
+	ROUTE: POST/user/add
+	DATA SENT: {"username":"!adfsdfds","email":"fdfd","pays":"can","age":"18","password":"G2344willll????"}
+	RESULT: FAIL
+	ERROR MESSAGE: {"username":["Username invalide"],"email":["email invalide"]}
+	TIME TO COMPLETE ACTION: 0.27108192443848 ms
+--------------------------------------------------------------------------------------------------------
+DAY: [ 05 23:11:07 ]
+	IP: 127.0.0.1
+	TYPE: APICALLS
+	WEB BROWSER: PostmanRuntime/7.43.0
+	ROUTE: POST/user/add
+	DATA SENT: {"username":"!adfsdfds","email":"fdfd","pays":"can","age":"18","password":"G2344willll????"}
+	RESULT: FAIL
+	ERROR MESSAGE: {"username":["Username invalide"],"email":["email invalide"]}
+	TIME TO COMPLETE ACTION: 0.11515617370605 ms
+--------------------------------------------------------------------------------------------------------
+DAY: [ 05 23:11:17 ]
+	IP: 127.0.0.1
+	TYPE: APICALLS
+	WEB BROWSER: PostmanRuntime/7.43.0
+	ROUTE: POST/user/add
+	DATA SENT: {"username":"!adfsdfds","email":"fdfd","pays":"can","age":"18","password":"G2344willll????"}
+	RESULT: FAIL
+	ERROR MESSAGE: {"username":["Username invalide"],"email":["email invalide"]}
+	TIME TO COMPLETE ACTION: 0.072956085205078 ms
+--------------------------------------------------------------------------------------------------------
+DAY: [ 05 23:12:46 ]
+	IP: 127.0.0.1
+	TYPE: APICALLS
+	WEB BROWSER: PostmanRuntime/7.43.0
+	ROUTE: POST/user/add
+	DATA SENT: {"username":"Georgie","email":"Georgie@gmail.com","pays":"can","age":"18","password":"G2344willll????"}
+	RESULT: SUCCES
+	DATA SENT: ["user created succesfully."]
+	TIME TO COMPLETE ACTION: 613.30699920654 ms
+--------------------------------------------------------------------------------------------------------
+DAY: [ 05 23:17:10 ]
+	IP: 127.0.0.1
+	TYPE: APICALLS
+	WEB BROWSER: PostmanRuntime/7.43.0
+	ROUTE: POST/user/add
+	DATA SENT: {"username":"Georgie","email":"Georgie@gmail.com","pays":"can","age":"18","password":"G2344willll????"}
+	RESULT: SUCCES
+	DATA SENT: ["erreur: erreur logique create.SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Georgie@gmail.com' for key 'email'"]
+	TIME TO COMPLETE ACTION: 521.04210853577 ms
+------------------------------------------------------------------------------
+DAY: [ 05 23:17:12 ]
+	IP: 127.0.0.1
+	TYPE: APICALLS
+	WEB BROWSER: PostmanRuntime/7.43.0
+	ROUTE: POST/user/add
+	DATA SENT: {"username":"Georgie","email":"Georgie@gmail.com","pays":"can","age":"18","password":"G2344willll????"}
+	RESULT: SUCCES
+	DATA SENT: ["erreur: erreur logique create.SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'Georgie@gmail.com' for key 'email'"]
+	TIME TO COMPLETE ACTION: 544.06690597534 ms
+------------------------------------------------------------------------------
+DAY: [ 05 23:18:53 ]
+	IP: 127.0.0.1
+	TYPE: APICALLS
+	WEB BROWSER: PostmanRuntime/7.43.0
+	ROUTE: GET/user/fetchAll
+	DATA SENT: []
+	RESULT: FAIL
+	ERROR MESSAGE: {"user :":[{"id":7,"username":"Xavier","email":"wiwi","pays":"can","age":18,"password":"1114db4370e9fc887f6a"},{"id":8,"username":"William","email":"testest","pays":"can","age":18,"password":"249bb850ef1f52d7a2da"},{"id":10,"username":"William","email":"gfas","pays":"can","age":18,"password":"5d61cec885cc67eb20f5"},{"id":12,"username":"sadfsdfds","email":"asdfsdafd","pays":"can","age":18,"password":"18c6cf82de4c30125c8f"},{"id":13,"username":"sadfsdfds","email":"asddfsfd","pays":"can","age":18,"password":"84122a54e500270253a9"},{"id":14,"username":"sadfsdfds","email":"fdfd","pays":"can","age":18,"password":"5d849d0f121c737b89cc"},{"id":16,"username":"Georgie","email":"Georgie@gmail.com","pays":"can","age":18,"password":"cb0dd886bddd8bf038f3"}]}
+	TIME TO COMPLETE ACTION: 7.2999000549316 ms
+------------------------------------------------------------------------------
+DAY: [ 05 23:20:55 ]
+	IP: 127.0.0.1
+	TYPE: APICALLS
+	WEB BROWSER: PostmanRuntime/7.43.0
+	ROUTE: GET/user/findOne
+	DATA SENT: {"email":"wiwi"}
+	RESULT: FAIL
+	ERROR MESSAGE: {"id":7,"username":"Xavier","email":"wiwi","pays":"can","age":18,"password":"1114db4370e9fc887f6a","salt":"X8yPbl73OofvUUR6Ysp6VQ=="}
+	TIME TO COMPLETE ACTION: 3.6289691925049 ms
+------------------------------------------------------------------------------
+DAY: [ 05 23:22:25 ]
+	IP: 127.0.0.1
+	TYPE: APICALLS
+	WEB BROWSER: PostmanRuntime/7.43.0
+	ROUTE: GET/user/login
+	DATA SENT: {"email":"testest","password":"12345"}
+	RESULT: FAIL
+	ERROR MESSAGE: {"id":8,"username":"William","email":"testest","pays":"can","age":18,"password":"249bb850ef1f52d7a2da","salt":"ZklY\/6AZHZS22op2TTCYrg=="}
+	TIME TO COMPLETE ACTION: 527.07886695862 ms
+------------------------------------------------------------------------------
