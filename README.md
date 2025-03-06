@@ -24,4 +24,10 @@ aderer au principe SOLID
 
 
 
-
+# Gestion de logger
+- [x] Quelle action a été réalisée.
+- [x] À quelle heure et date.
+- [x] À partir de quel navigateur/client Web.
+- [x] Qui a effectué l’action.
+## information trouver
+https://www.datadoghq.com/blog/php-logging-guide/#the-php-system-logger
