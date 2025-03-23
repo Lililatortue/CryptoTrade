@@ -22,7 +22,12 @@ aderer au principe SOLID
 
 ## information trouver
 
+# Gestion de Session
+- [x] Creation de Token de validation
+- [x] Validation de Token
+- [x] Login
 
+## information trouver
 
 # Gestion de logger
 - [x] Quelle action a été réalisée.
