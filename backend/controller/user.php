@@ -1,13 +1,14 @@
 
 <?php
 include "../dbdata/dBConnection.php";
-include "config.php"; 
+include "../dbdata/config.php"; 
+
+
 
 function findOneUser($data){
-
-    try{
-        $db=DatabaseConnection::getInstance();
-        $stmt = $db -> prepare( "SELECT * FROM user WHERE email=:email" );
+    $db = DatabaseConnection::getInstance();
+    try{   
+        $stmt = $db->getConnection() -> prepare( "SELECT * FROM user WHERE email=:email" );
         $stmt -> execute([":email"=>$data['email']]);
         $user=$stmt->fetch(PDO::FETCH_ASSOC);
         
@@ -27,9 +28,9 @@ function findOneUser($data){
 }
 
 function fetchAllUser(){      
+    $db = DatabaseConnection::getInstance();
     try{
-        $db= DatabaseConnection::getInstance();
-        $stmt=$db -> prepare( "SELECT * FROM user");
+        $stmt = $db->getConnection() -> prepare( "SELECT * FROM user");
         $stmt -> execute();
         //sa retourne une list de user
         $users=$stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -50,16 +51,15 @@ function fetchAllUser(){
 }
 
 function createUser($data){
-    
+    $db = DatabaseConnection::getInstance(); 
     try{
-        $db= DatabaseConnection::getInstance();
         //salt and hash password
         $salt = base64_encode(random_bytes(16));
-        $iterations = 600000;
+        $iterations = 100000;
         $hash = hash_pbkdf2("sha256",$data['password'],$salt,$iterations,20);
 
-        $stmt = $db -> prepare("INSERT INTO user(username, email, pays, age, password, salt ) 
-                                    VALUES (:username,:email, :pays, :age, :password, :salt)");
+        $stmt = $db->getConnection() -> prepare("INSERT INTO user(username, email, pays, age,role, password, salt ) 
+                                    VALUES (:username,:email, :pays, :age, 'guest', :password, :salt)");
         $bool=$stmt -> execute([":username" => $data['username'],
                                  ":email" => $data['email'], 
                                 ":pays" =>$data['pays'],
@@ -81,10 +81,10 @@ function createUser($data){
 }
 
 function updateUser($data){
+    $db = DatabaseConnection::getInstance();
     //bad error handling
     try{
-        $db= DatabaseConnection::getInstance(); 
-        $stmt = $db -> prepare(createString($data));
+        $stmt = $db->getConnection() -> prepare(createString($data));
         $bool = $stmt -> execute(createExecute($data));
     } catch(Exception $e){
         http_response_code(500);
@@ -101,9 +101,9 @@ function updateUser($data){
 }
 
 function deleteUser($data){
-    $db= DatabaseConnection::getInstance();
+    $db = DatabaseConnection::getInstance();
     try{
-        $stmt = $db -> prepare("DELETE FROM user WHERE email=:email");
+        $stmt = $db->getConnection() -> prepare("DELETE FROM user WHERE email=:email");
         $bool = $stmt -> execute(["id"=>$data['id']]);     
     } catch (Exeception $e) {
         http_response_code(500);
@@ -115,21 +115,6 @@ function deleteUser($data){
     } else {
         http_response_code(400);
         return ["un erreur est survenu durant l'effacement de l'utilisateur."];
-    }
-}
-
-function login($data){
-    $user=findOneUser($data);
-    
-    $iterations = 600000;
-    $hash = hash_pbkdf2("sha256",$data['password'],$user["salt"],$iterations,20);
-    
-    if($hash==$user['password']){
-        http_response_code(200);
-        return $user;
-    } else {
-        http_response_code(401);
-        return [("error : invalid credentials")];
     }
 }
 
