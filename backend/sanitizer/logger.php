@@ -3,27 +3,36 @@ enum logType {
     case ERROR;
     case ACTION;
     case DEBUG;
+    case INFO;
 }
+
 class logger{
-    
+    private static $instance=null;
     private $year;
     private $month;
-    private $day;
-    private $name;
     private LogType $type;
 
-    private $action_state=null;
+    private $call_tag=null;
     private $action_time=null;
     private $start=null;
-    public function __construct($name,$directory,LogType $type){
-        date_default_timezone_set('America/New_York');
-        $this->year  = date('Y');
-        $this->month = date('F');
-        $this->day   = date('d H:i:s');
-        $this->type = $type;
-        $this->name=$name;
-        $this->setdirectory($directory);
+
+    private function __construct($call_tag,$directory,LogType $type){
+            date_default_timezone_set('America/New_York');
+            $this->year  = date('Y');
+            $this->month = date('F');
+            $this->setdirectory($directory);
+            $this->type = $type;
+            $this->call_tag=$call_tag;
     }
+
+    public static function getLoggerInstance($name, $directory,LogType $type){
+        if(self::$instance === null){
+            self::$instance = new self($name, $directory, $type);
+        }
+           return self::$instance;
+        
+    }
+
     //setters
     private function setdirectory($directory){
         $directory.=$this->year;
@@ -51,26 +60,17 @@ class logger{
     }
 
 
-    public function logging($ip,$web_browser,$routes,$result,$data){   
-        $log_path=$this->directory.'/'.$this->month.'.txt';
-
-        
-        $logs= "DAY: [ ".$this->day." ]\n\tIP: ".$ip;
-
+    public function logging($ip,$web_browser,$routes){   
+        $log_path=$this->directory.'/'.$this->month.'.log';
+        $logs= "DAY: [ ".date('d H:i:s')." ]\n\tIP: ".$ip;
+        $logs.= "\n\tTYPE: ".$this->call_tag;
         if(isset($this->name))
-            $logs.= "\n\tTYPE: ".$this->name;
-        
+            $logs.= "\n\tTYPE: ".$this->call_tag;
         $logs.="\n\tWEB BROWSER: ".$web_browser;
         $logs.="\n\tROUTE: ".$routes;
-        $logs.="\n\tDATA SENT: ".json_encode($data);
-
         $logs.="\n\tRESULT: ".($this->action_state==true ? "SUCCES" : "FAIL");
-
-        $logs.="\n\t".($this->action_state==true ? "DATA SENT: ":"ERROR MESSAGE: ")
-        .json_encode($result);
-
         if($this->type=== LogType::ACTION)
-            $logs.= "\n\tTIME TO COMPLETE ACTION: ".
+            $logs.= "\n\tTIME: ".
             (isset($this->action_time) ? $this->action_time." ms" : "NOT RECORDED");
         $logs.="\n------------------------------------------------------------------------------\n";
         file_put_contents($log_path, $logs,FILE_APPEND);    

@@ -45,7 +45,7 @@ function fetchAllUser(){
         http_response_code(200);
         return ["user :"=>$users];
     } else {
-        http_response_code(204);//204 est retourne quand la requete a reussi mais aucun contenu est retourner
+        http_response_code(204);
         return ["no data found"];
     }
 }

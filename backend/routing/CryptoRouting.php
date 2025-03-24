@@ -1,5 +1,5 @@
 <?php
-
+include "../controller/crypto.php";
 
 function CryptoRouter($data,$route){
     $logger=$_SESSION['LOGGER_ACTION'];

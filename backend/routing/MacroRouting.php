@@ -1,8 +1,11 @@
 <?php
 include "../routing/UserRouting.php";
+include "../routing/CryptoRouting.php";
 include "../routing/SessionRouting.php";
 include "../sanitizer/endpointObserver.php";
 include "../sanitizer/logger.php";
+
+
 //variable global
 session_start();
 if(!isset($_SESSION['LOGGER_ACTION'])){
