@@ -1,0 +1,137 @@
+<?php 
+    //classe qui va servir a gerer le CRUD pour les Crypto (ADMINS only)
+    class CryptoCoin
+    {
+        /* - (INIT) DECLARATION VARAIBLES - */
+        private $conn; //Sert a prendre comme parametre la connection => SQLi
+        private $name;
+        private $symbol;
+        private $price;
+        private $volatility;   
+        private $cap; //Market Cap = estimation total value de la crypto 
+        private $image_url; //Pour le icone pendant l'Affichage
+        private $dateCreation;
+
+        /* - CONSTRUCTEUR AVEC CONNECTION SQLi - */
+        public function __construct($conn) {
+            $this->conn = $conn; // Store connection dans l'instance
+        }
+
+        /* - METHODES - */
+        // {C}RUD : Creation nouveau crypto 
+        public function addCrypto($name, $symbol, $priceInit, $capInit)
+        {
+            //requete SQL => INSERTION dans la table 'crypto'
+            $sql = "INSERT INTO crypto (crypto_nom, symbole, valeur, volatilite, capMarket, date_creation)
+                    VALUES (?, ?, ?, 0, ?, NOW())"; //vol commence a 0 + creation est la date d'auj. 
+            //Preparation de la requete SQL
+            $stmt = $this->conn->prepare($sql);
+            //Lier les variables aux espaces reserves de la requete (les '?' dans VALUES)
+            $stmt->bind_param("ssdd", $name, $symbol, $priceInit, $capInit); //'ssdd' == string x2 + double x2
+            return $stmt->execute();
+        }
+
+        //C{R}UD : Affichage de 1 crypto dans le Main Menu
+        public function showTheCrypto($result) //prend la commande SQL comme var
+        {    
+            if ($result->num_rows > 0) //SI 0 data = affiche rien
+            { 
+                //Parcours la table 'crypto' + Mets dans une table HTML <TR> & <TD>)
+                while ($row = $result->fetch_assoc()) 
+                {   
+                    //Colonne pour l'image (Logo) du crypto
+                    echo "<tr> <td rowspan='2'> " . "<img src='" . $row['icon_url'] . "' alt='" . $row['crypto_nom'] . "' height='100px' />" . "</td>";
+                    //Colonne pour les valeurs
+                    echo "<td> " . $row['symbole'] . "</td>";
+                    echo "<td> " . $row['valeur'] . "</td> </tr>";
+                    //empty (ToDo Later)
+                    echo "<tr> <td> </td> <td> </td> </tr>"; 
+                }
+            }
+            else {  echo "<tr> Aucune crypto retrouvée </tr>"; }
+        
+            //OUTPUT :
+            //   <tr> Row 1
+            //     <td rowspan="2"> Image (spans 2 rows)</td>
+            //     <td> Text </td>
+            //     <td> Prix $$$ </td>
+            //   </tr>
+            //   <tr>
+            //     <td> nombre de shares </td>
+            //     <td> R.O.I. </td>
+            //   </tr>
+        }
+
+        //C{R}UD : Affiche tous les cryptos
+        public function showAll() 
+        {
+            //requete SQL => tous les noms dans la table 'crypto'
+            $sql = "SELECT * FROM crypto";
+            //stockage dans $result
+            $result = $this->conn->query($sql);
+            //fonction READ
+            $this->showTheCrypto($result);
+        }
+
+        //C{R}UD : Read par son symbole
+        public function getBySymbol($symbol) 
+        {
+            //requete SQL => RECHERCHE dans la table 'crypto'
+            $sql = "SELECT * FROM crypto WHERE symbole = ?";
+            //Preparation de la requete SQL
+            $stmt = $this->conn->prepare($sql);
+            //Execution
+            $stmt->bind_param("s", $symbol);
+            $stmt->execute();
+            //stockage dans $result
+            $result = $stmt->get_result();
+            //fonction READ
+            $this->showTheCrypto($result);
+        }
+
+        //CR{U}D : fonction pour volatilite (change chaque 5~8 min)
+        public function priceUpdate($symbol, $NEW_volatility) 
+        {
+            //TODO
+        }         
+        
+        //CRU{D} : Suppression d'une crypto
+        public function deleteCrypto_byNAME($name) 
+        {
+            $sql = "DELETE FROM crypto WHERE crypto_nom = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("s", $name);
+            return $stmt->execute();
+        }   
+        public function deleteCrypto_bySYMBOL($symbol) 
+        {
+            $sql = "DELETE FROM crypto WHERE symbole = ? ";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("s", $symbol);
+            return $stmt->execute();
+        }                    
+        
+        /* - GETTERS + SETTERS - */
+        // 1. Nom + Symboles
+        public function setName($Name) {$this->name = $Name;}
+        public function getName() { return $this->name; }
+        public function setSymbol($Symbol) {$this->symbol = $Symbol;}
+        public function getSymbol() { return $this->symbol; }
+        // 2. prix + volatitite
+        public function setPrice($Price) { $this->price = $Price; }
+        public function getPrice() { return $this->price; }
+        public function setVolatitity($Volatility) { $this->volatility = $Volatility; }
+        public function getVolatility() { return $this->volatility; }
+        // 3. cap + Image
+        //MarketCap exemple : il y a 10 000 coins en circulation. Donc 10k x $price = $cap)
+        public function setCap($Cap) {$this->cap = $Cap;}
+        public function getCap() { return $this->cap; }
+        public function setImageUrl($URL) { $this->image_url = $URL; }
+        public function getImageUrl() { return $this->image_url; }
+
+        public function setDate_Creation($date) { $this->dateCreation = $date; }
+        public function getDate_Creation() { return $this->dateCreation; }
+    }
+?>
+
+
