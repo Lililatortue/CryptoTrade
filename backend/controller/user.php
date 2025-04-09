@@ -16,14 +16,16 @@ function findOneUser($data){
     } catch (Exception $e) {
         //error handling server error
         http_response_code(500);
-        return ["erreur: logical erreur findOneUser"];
+        header("Content-Type: application/json");
+        echo json_encode(["error"=>"logical erreur findOneUser"]);
+        exit;
     }
     if($user){
-        http_response_code(200);
         return $user;
     } else {
-        http_response_code(204);//204 est retourne quand la requete a reussi mais aucun contenu est retourner
-        return ["no data found"];
+        http_response_code(404);
+        echo json_encode(["error"=>"no data found"]) ;
+        exit;
     }
 }
 
@@ -39,14 +41,17 @@ function fetchAllUser(){
         }
     } catch(PDOException $e){
         http_response_code(500);
-        return ["erreur: impossible d'etablir une connection avec la database."];
+        header("Content-Type: application/json");
+        echo json_encode(["error"=>"logical erreur fetchAllUser"]);
+        exit;
     }
     if($users){
         http_response_code(200);
         return ["user :"=>$users];
     } else {
-        http_response_code(204);
-        return ["no data found"];
+        http_response_code(404);
+        echo json_encode(["error"=>"no data found"]) ;
+        exit;
     }
 }
 
@@ -69,13 +74,15 @@ function createUser($data){
     } catch(Exception $e){
         //error handling server error
         http_response_code(500);
-        return ["erreur: erreur logique create.".$e->getMessage()];
+        header("Content-Type: application/json");
+        echo json_encode(["error"=>"logical erreur createUser"]);
+        exit;
     }
     if($bool){
         http_response_code(200);
         return ["user created succesfully."];
     } else {
-        http_response_code(400);//204 est retourne quand la requete a reussi mais aucun contenu est retourner
+        http_response_code(404);//204 est retourne quand la requete a reussi mais aucun contenu est retourner
         return ["erreur est survenu durant la creation."];
     }
 }

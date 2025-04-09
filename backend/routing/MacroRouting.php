@@ -54,10 +54,10 @@ $action = function($data) use($methods,$uri,$observer){
         case "crypto":return CryptoRouter($data,$route);break;
                                   
       //route portefeuille management
-        case "wallet": return WalletRouter($data,$route);
+        case "wallet": return WalletRouter($data,$route);break;
       
       //route statistique management
-        case "stats":return statsManager($data,$route); 
+        case "stats":return statsManager($data,$route);break;
         
         default: {http_response_code(404); return ["erreur, route non-existante"];}//bad request;
     }

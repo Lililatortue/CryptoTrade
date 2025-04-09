@@ -20,7 +20,8 @@ function MakeToken($data){
 
 function login($data){
     $user=findOneUser($data);
-    
+
+   
     $iterations = 100000;
     $hash = hash_pbkdf2("sha256",$data['password'],$user["salt"],$iterations,20);
     

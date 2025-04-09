@@ -2,46 +2,46 @@
 
 <?php
 
-function getRendement($data){
-    $db = DatabaseConnection::getInstance();
-    $total_rendement=[];
+// function getRendement($data){
+//     $db = DatabaseConnection::getInstance();
+//     $total_rendement=[];
     
-    try{
-        $stmt = $db->getConnection() -> prepare( "SELECT * FROM v_transaction WHERE email=:email");
-        $stmt -> execute([":email"=>$data['email']]);
-        $crypto=$stmt->fetch(PDO::FETCH_ASSOC);
-        foreach($user as $key=>$value){
-            if($key['transaction_type']=='SELL'){
-               $total_valeur_crypto = $key['quantite']*$key['valeur']; 
-               $total_valeur_user = $key['quantite'] * $key['achat_date'];
-               $total_rendement+=$total_valeur_user - $total_valeur_crypto / $total_valeur_crypto;
-            }                     
-        }
+//     try{
+//         $stmt = $db->getConnection() -> prepare( "SELECT * FROM v_transaction WHERE email=:email");
+//         $stmt -> execute([":email"=>$data['email']]);
+//         $crypto=$stmt->fetch(PDO::FETCH_ASSOC);
+//         foreach($user as $key=>$value){
+//             if($key['transaction_type']=='SELL'){
+//                $total_valeur_crypto = $key['quantite']*$key['valeur']; 
+//                $total_valeur_user = $key['quantite'] * $key['achat_date'];
+//                $total_rendement+=$total_valeur_user - $total_valeur_crypto / $total_valeur_crypto;
+//             }                     
+//         }
 
-    } catch() {
+//     } catch() {
 
-    } 
+//     } 
     
 
         
 
-    }
-}
+//     }
+// }
 
-function Rentabilite($data){
-    $db = DatabaseConnection::getInstance();
+// function Rentabilite($data){
+//     $db = DatabaseConnection::getInstance();
     
-    try{
-        $stmt = $db->getConnection() -> prepare( "SELECT * FROM v_transaction 
-                                                  GROUP BY crypto_id
-                                                  ORDER BY transaction_date");
-        $stmt -> execute([":email"=>$data['email']]);
-        $transactions =$stmt->fetch(PDO::FETCH_ASSOC);
+//     try{
+//         $stmt = $db->getConnection() -> prepare( "SELECT * FROM v_transaction 
+//                                                   GROUP BY crypto_id
+//                                                   ORDER BY transaction_date");
+//         $stmt -> execute([":email"=>$data['email']]);
+//         $transactions =$stmt->fetch(PDO::FETCH_ASSOC);
 
-    } catch() {
+//     } catch() {
 
-    }
-}
+//     }
+// }
 
 
 function fetchAllTransaction($data){

@@ -9,7 +9,10 @@ class DatabaseConnection{
                 $data_source="mysql:host=".host.";dbname=" . database_name . ";charset=utf8mb4";
                 $this->connection=new PDO($data_source,username,password);
             } catch (PDOException $e) {
-                throw new PDOException("Database connection failed: " . $e->getMessage());
+                http_response_code(500);
+                header("Content-Type: application/json");
+                echo json_encode(["error"=>"database failed"]);
+                exit;
             } 
          
     }
