@@ -10,9 +10,13 @@ create table user(
 
 create table crypto(
     id VARCHAR PRIMARY KEY,
-    quantite NUMBER not null,
-    valeur NUMBER not null,
-    image NUMBER not null
+    name VARCHAR(50) NOT NULL,
+    symbole VARCHAR(10) NOT NULL,
+    price_usd DECIMAL() NOT NULL ,
+    quantity NUMBER not null,
+    total_supply BIGINT ,
+    market_cap BIGINT,
+    created_date DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 --junction table

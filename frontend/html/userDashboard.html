@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Trading Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/userDahboard.css"> 
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo">CryptoTrade</div>
+        <div class="user-profile">
+            <img src="../Img/CryptoTradeLogo.png" alt="User">
+            <span>John Doe</span>
+        </div>
+    </div>
+    
+    <div class="sidebar">
+        <a href="#">Dashboard</a>
+        <a href="#">Wallet</a>
+        <a href="#">Market</a>
+        <a href="#">Transactions</a>
+        <a href="#">Settings</a>
+        <a href="#">Logout</a>
+    </div>
+    
+    <div class="main-content">
+        <h2>Crypto Market Overview</h2>
+        <table class="crypto-table">
+            <thead>
+                <tr>
+                    <th>Symbole</th>
+                    <th>Name</th>
+                    <th>Price (USD)</th>
+                    <th>Quantity</th>
+                    <th>Market Cap</th>
+                    <th>Total Supply</th>
+                    <th>Created Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="crypto-table-body">
+                <!-- Data loaded dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- MODAL -->
+<div class="modal-overlay" id="buyModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Acheter un actif</h3>
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+      </div>
+      <div class="modal-body">
+        <label for="crypto-select">Sélectionnez un actif :</label>
+        <input type="text" placeholder="Rechercher une crypto..." id="searchInput" onkeyup="filterAssets()" />
+  
+        <ul id="assetList">
+          <li><img src="https://cryptoicons.org/api/icon/btc/32" /> Bitcoin (BTC)</li>
+          <li><img src="https://cryptoicons.org/api/icon/eth/32" /> Ethereum (ETH)</li>
+          <li><img src="https://cryptoicons.org/api/icon/sol/32" /> Solana (SOL)</li>
+          <li><img src="https://cryptoicons.org/api/icon/usdt/32" /> Tether (USDT)</li>
+          <!-- Ajoute d'autres cryptos ici -->
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="signup-cta">
+    <div class="signup-content">
+        <h2>Commence à trader dès maintenant</h2>
+        <p>Rejoins CryptoTrade et explore les cryptos avec sécurité et simplicité.</p>
+        <a href="pageSignIn.html" class="cta-button">Créer un compte</a>
+    </div>
+    <div class="signup-image">
+        <img src="../Img/crypto.jpg" alt="Graphique de croissance">
+    </div>
+</div>
+
+
+
+
+    <script>
+        const cryptoData = [
+            {
+                symbole: "BTC",
+                name: "Bitcoin",
+                price_usd: 65000,
+                quantity: 0.35,
+                market_cap: 1200000000000,
+                total_supply: 21000000,
+                created_date: "2023-10-01 12:00:00"
+            },
+            {
+                symbole: "ETH",
+                name: "Ethereum",
+                price_usd: 3500,
+                quantity: 5.2,
+                market_cap: 500000000000,
+                total_supply: 120000000,
+                created_date: "2023-10-02 13:30:00"
+            },
+            {
+                symbole: "USDT",
+                name: "Tether",
+                price_usd: 1.00,
+                quantity: 1500,
+                market_cap: 83000000000,
+                total_supply: 85000000000,
+                created_date: "2023-10-03 09:45:00"
+            }
+        ];
+
+        function loadCryptoTable() {
+    const tableBody = document.getElementById("crypto-table-body");
+    cryptoData.forEach(crypto => {
+        const row = `
+            <tr>
+                <td>${crypto.symbole}</td>
+                <td>${crypto.name}</td>
+                <td>$${crypto.price_usd.toLocaleString()}</td>
+                <td>${crypto.quantity}</td>
+                <td>$${crypto.market_cap.toLocaleString()}</td>
+                <td>${crypto.total_supply.toLocaleString()}</td>
+                <td>${crypto.created_date}</td>
+                <td><button class="buy-btn" onclick="buyCrypto('${crypto.symbole}')">Acheter</button></td>
+            </tr>`;
+        tableBody.innerHTML += row;
+    });
+}
+
+function buyCrypto(symbole) {
+  document.getElementById("buyModal").style.display = "flex";
+}
+
+function closeModal() {
+  document.getElementById("buyModal").style.display = "none";
+}
+
+function filterAssets() {
+  const input = document.getElementById("searchInput");
+  const filter = input.value.toLowerCase();
+  const items = document.querySelectorAll("#assetList li");
+
+  items.forEach(item => {
+    const text = item.textContent.toLowerCase();
+    item.style.display = text.includes(filter) ? "" : "none";
+  });
+}
+
+        document.addEventListener('DOMContentLoaded', loadCryptoTable);
+    </script>
+</body>
+</html>
