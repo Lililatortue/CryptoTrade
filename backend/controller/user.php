@@ -80,10 +80,11 @@ function createUser($data){
     }
     if($bool){
         http_response_code(200);
-        return ["user created succesfully."];
+        return (["user created succesfully."]);
     } else {
         http_response_code(404);//204 est retourne quand la requete a reussi mais aucun contenu est retourner
-        return ["erreur est survenu durant la creation."];
+        echo json_encode(["error"=>"erreur est survenu durant la creation."]);
+        exit;
     }
 }
 

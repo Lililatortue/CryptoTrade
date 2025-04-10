@@ -42,8 +42,13 @@ class endpointObserver{
                 }
                 default:break;
             }
-        }  
-        return $json_error;
+        
+        }
+        if($json_error !=null){
+        
+            echo json_encode($json_error);
+            exit;
+        }
     }
     //assure que le niveaux dacces est adequoit pour faire cette action
     function AccesPolicies($info){
