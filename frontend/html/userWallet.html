@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Wallet - CryptoTrade</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/userWallet.css"> 
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo">CryptoTrade</div>
+        <div class="user-profile">
+            <img src="../Img/CryptoTradeLogo.png" alt="User">
+            <span>John Doe</span>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <a href="../html/userDashboard.html">Dashboard</a>
+        <a href="../html/userWallet.html">Wallet</a>
+        <a href="#">Market</a>
+        <a href="#">Transactions</a>
+        <a href="#">Settings</a>
+        <a href="#">Logout</a>
+    </div>
+
+    <div class="main-content">
+        <h2>Mon Portefeuille</h2>
+
+        <div class="wallet">
+            <h3>Solde Total</h3>
+            <p>$40,650.00</p>
+        </div>
+
+        <table class="crypto-table">
+            <thead>
+                <tr>
+                    <th>Symbole</th>
+                    <th>Nom</th>
+                    <th>Quantité</th>
+                    <th>Prix unitaire</th>
+                    <th>Valeur totale</th>
+                </tr>
+            </thead>
+            <tbody id="wallet-table-body">
+                <!-- Data loaded dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const walletData = [
+            {
+                symbole: "BTC",
+                name: "Bitcoin",
+                quantity: 0.35,
+                price: 65000
+            },
+            {
+                symbole: "ETH",
+                name: "Ethereum",
+                quantity: 5.2,
+                price: 3500
+            },
+            {
+                symbole: "USDT",
+                name: "Tether",
+                quantity: 1500,
+                price: 1.00
+            }
+        ];
+
+        function loadWalletTable() {
+            const tbody = document.getElementById("wallet-table-body");
+
+            walletData.forEach(asset => {
+                const total = (asset.quantity * asset.price).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                const row = `
+                    <tr>
+                        <td>${asset.symbole}</td>
+                        <td>${asset.name}</td>
+                        <td>${asset.quantity}</td>
+                        <td>$${asset.price.toLocaleString()}</td>
+                        <td>$${total}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', loadWalletTable);
+    </script>
+</body>
+</html>
