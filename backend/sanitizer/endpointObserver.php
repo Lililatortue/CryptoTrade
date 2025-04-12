@@ -6,11 +6,17 @@ class endpointObserver{
 
     function sanitize(&$info){
         foreach($info as $key => &$data){
-            $data=htmlspecialchars($data);
+                $data=htmlspecialchars($data);       
         }
     }
     //fonction pour verifier que toute policies concernant l'info de l'utilisateur est pertinant
     function userInfoPolicies($info){
+        if (!is_array($info)) {
+            http_response_code(400);
+            header("Content-Type: application/json");
+            echo json_encode(["error" => "Invalid or missing JSON data"]);
+            exit;
+        }
         $pattern=json_decode(file_get_contents("..\\sanitizer\\Policies\\user_info.json"), true);  
         $json_error=[];
         foreach($info as $key=>$data){
@@ -44,8 +50,9 @@ class endpointObserver{
             }
         
         }
-        if($json_error !=null){
-        
+        if(!empty($json_error)){
+            http_response_code(400);
+            header("Content-Type: application/json");
             echo json_encode($json_error);
             exit;
         }

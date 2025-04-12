@@ -7,17 +7,47 @@
 
   <meta charset="UTF-8"> 
 
-  <title>CodePen - Animated Login Form using Html &amp; CSS Only</title> 
+  <title>login</title> 
 
   <link rel="stylesheet" href="../css/pageLogin.css"> 
-  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
- </head> 
+  <script src="../../frontend/js/api/ApiConnection.js" ></script>
+ 
+ <script >
+    document.addEventListener("DOMContentLoaded", function(){
+        var form = document.getElementById("login");
+        //var resultResultDiv = document.getElementById('request _result');
+       
+        form.addEventListener("submit", function(event) {
+            
+            event.preventDefault();
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+            //var remember = document.getElementById('remember').checked;
 
+            var data = {
+                "email": email,
+                "password": password
+                //"remember": remember
+            };
+            //xml ovbjects
+            const connection = new ApiConnection("/session/login");
+
+            connection.postRequest(data,(error, response)=>{
+                if(error){
+                    resultResultDiv.innerHTML = 'Login failed: ' + error;                                
+                } else {
+                    response; 
+                }
+            });
+        });
+    });
+</script>
+</head>
  <body> <!-- partial:index.partial.html --> 
 
     <div class="login-container">
         <h2>Connexion à CryptoTrade</h2>
-        <form action="#" method="POST">
+        <form id="login" >
             <div class="input-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" placeholder="exemple@email.com" required>
@@ -29,7 +59,7 @@
             <button type="submit">Se connecter</button>
         </form>
         <div class="footer">
-            <p>Pas encore inscrit ? <a href="#">Créer un compte</a></p>
+            <p>Pas encore inscrit ? <a href="pageSignIn.html">Créer un compte</a></p>
         </div>
     </div>
 

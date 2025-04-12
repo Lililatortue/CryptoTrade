@@ -26,25 +26,37 @@ class ApiConnection{
             callback(this.statusText, null);
         };
         this.xmlRequest.send(); 
-    }
+    };
 
-    postRequest(data,callback) {
+    postRequest(data, callback) {
         this.xmlRequest.open("POST", this.fullroute);
         this.xmlRequest.setRequestHeader("Content-Type", "application/json");
+    
         this.xmlRequest.onload = () => {
+            let responseText = this.xmlRequest.responseText;
             if (this.xmlRequest.status >= 200 && this.xmlRequest.status < 300) {
-
-                callback(null, this.xmlRequest.response);
+                try {
+                    const data = JSON.parse(responseText);
+                    callback(null, data);
+                    
+                } catch (e) {
+                    callback(this.xmlRequest.status, null);
+                }
             } else {
-                
-                callback(this.xmlRequest.statusText, null);
+                try {
+                    console.log(responseText);
+                    const error = JSON.parse(responseText);
+                    callback(error, null);
+                   
+                } catch (e) {
+                    callback({ error: this.xmlRequest.statusText, raw: responseText }, null);
+                }
             }
         };
-
         this.xmlRequest.onerror = () => {
-            
-            callback(this.xmlRequest.statusText, null);
+            console.error(" Network error occurred during XHR.");
+            callback("erreur de reseautage", null);
         };
-        this.xmlRequest.send(JSON.stringify(data)); 
+        this.xmlRequest.send(JSON.stringify(data));
     }
 }

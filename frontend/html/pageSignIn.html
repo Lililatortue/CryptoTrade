@@ -4,36 +4,117 @@
 <html lang="en"> 
 
  <head> 
-
   <meta charset="UTF-8"> 
-
-  <title>CodePen - Animated Login Form using Html &amp; CSS Only</title> 
+  <title>Sign in</title> 
+                <!--script for api communication-->
+  <script src="../../frontend/js/api/ApiConnection.js" ></script>
+                <!--script error pour le error handling -->
+  <link rel="stylesheet" href="../../frontend/errorhandling/error-css.css"> 
+  <script src="../../frontend/errorhandling/ServerError.js" ></script>
 
   <link rel="stylesheet" href="../css/pageSignIn.css"> 
-  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+  
+  
+  
+    <script >
+        function calculateAge(age){// pas parfait fait just comparer 2 anne
+            const birthDate = new Date(age);
+            const today = new Date();
+            return today.getFullYear() - birthDate.getFullYear();
+        }
+        document.addEventListener("DOMContentLoaded", function(){
+            var form = document.getElementById("register");
+
+            var errorMessages = {
+                    "username":"Invalid username ",
+                    "email": "invalide email",
+                    "pays":"Pays invalid",
+                    "age":"Desole malheureusement vous devez avoir au dessus de 18 ans",
+                    "password": "Le mot de passe doit avoir une majuscule, 1 char special et 3 chiffres",
+                    "badRequest":"incapable de proceder la requete"
+            };
+            const errorhandling = new ServerErrorHandling(errorMessages);
+
+            form.addEventListener("submit", function(event) {
+
+                event.preventDefault();
+                errorhandling.refresh();
+
+
+                var username = document.getElementById('username').value;
+                var email = document.getElementById('email').value;
+                var pays = document.getElementById('pays').value;
+                var age = document.getElementById('age').value;
+                var password = document.getElementById('password').value;
+                //var remember = document.getElementById('remember').checked;
+
+                var data = {
+                    "username":username,
+                    "email": email,
+                    "pays":pays,
+                    "age":calculateAge(age),
+                    "role":"user",
+                    "password": password
+                };
+                
+                //xml objects
+                const connection = new ApiConnection("/user/add");
+
+                connection.postRequest(data,(error, response)=>{
+                    if(error){
+                        console.log(error)
+                        errorhandling.handleError(error);                               
+                    } else {
+                        window.location.href = "pageLogin.html";
+                    }
+                });
+            });
+        });
+    </script>
  </head> 
 
  <body>
 
     <div class="signup-container">
         <h2>Créer un compte CryptoTrade</h2>
-        <form action="#" method="POST">
+        <form id="register">
             <div class="input-group">
                 <label for="username">Nom d'utilisateur</label>
-                <input type="text" id="username" placeholder="Votre pseudo" required>
+                <input type="text" id="username" placeholder="Votre pseudo" >
+                <span id="username-error" class="error-msg"></span> 
             </div>
+
             <div class="input-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" placeholder="exemple@email.com" required>
+                <input type="email" id="email" placeholder="exemple@email.com" >
+                <span id="email-error" class="error-msg"></span>
+                
             </div>
+
+            <div class="input-group">
+                <label for="pays">pays</label>
+                <input type="pays" id="pays" placeholder="Canada" >
+                <span id="pays-error" class="error-msg"></span>
+            </div>
+
+            <div class="input-group">
+                <label for="age">Date de naissance</label>
+                <input type="date" id="age" placeholder="" >
+                <span id="age-error" class="error-msg"></span>
+                
+            </div>
+
             <div class="input-group">
                 <label for="password">Mot de passe</label>
-                <input type="password" id="password" placeholder="********" required>
+                <input type="password" id="password" placeholder="********" >
+                <span id="password-error" class="error-msg"></span>
             </div>
+
             <div class="input-group">
                 <label for="confirm-password">Confirmez le mot de passe</label>
-                <input type="password" id="confirm-password" placeholder="********" required>
+                <input type="password" id="confirm-password" placeholder="********" >
             </div>
+            <span id="badRequest-error" class="error-msg"></span>
             <button type="submit">S'inscrire</button>
         </form>
         <div class="footer">

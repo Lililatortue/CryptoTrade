@@ -71,12 +71,14 @@ function createUser($data){
                                 ":age" => $data['age'],
                                 ":password" =>$hash,
                                 ":salt" =>$salt]);
-    } catch(Exception $e){
-        //error handling server error
-        http_response_code(500);
-        header("Content-Type: application/json");
-        echo json_encode(["error"=>"logical erreur createUser"]);
-        exit;
+    } catch(PDOException $e){
+        http_response_code(400);
+        if($e->getCode() == 23000){//duplicate key   
+            header("Content-Type: application/json");
+            echo json_encode(["badRequest"=>"email already exist"]);
+            exit;
+        }
+        
     }
     if($bool){
         http_response_code(200);
