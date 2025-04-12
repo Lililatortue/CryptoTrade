@@ -1,25 +1,31 @@
 <?php
-
 class DatabaseConnection{
-    private static $connection=null;
+    private static $db=null;
+    private $connection;
 
-    public function __construct(){
-        if(self::$connection==null){
+    private function __construct(){
+        
             try{
                 $data_source="mysql:host=".host.";dbname=" . database_name . ";charset=utf8mb4";
-                self::$connection=new PDO($data_source,username,password);
+                $this->connection=new PDO($data_source,username,password);
             } catch (PDOException $e) {
-                throw new PDOException("Database connection failed: " . $e->getMessage());
+                http_response_code(500);
+                header("Content-Type: application/json");
+                echo json_encode(["error"=>"database failed"]);
+                exit;
             } 
-        }
          
     }
     
     public static function getInstance() {
-        if (self::$connection === null) {
-            new self();
+        if (self::$db === null) {
+            self::$db = new DatabaseConnection(); 
         }
-        return self::$connection;
+        return self::$db;
+    }
+
+    public function getConnection(){
+        return $this->connection;
     }
 }
 ?>
