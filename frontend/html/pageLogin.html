@@ -1,4 +1,8 @@
+<?php
+session_start();
+    
 
+?>
 <!doctype html>
 
 <html lang="en"> 
@@ -8,17 +12,29 @@
   <meta charset="UTF-8"> 
 
   <title>login</title> 
+              <!--script for api communication-->
+    <script src="../../frontend/js/api/ApiConnection.js" ></script>
+              <!--script error pour le error handling -->
+    <link rel="stylesheet" href="../../frontend/errorhandling/error-css.css"> 
+    <script src="../../frontend/errorhandling/ServerError.js" ></script>
+              <!--script error pour le error handling -->
+    <script src="../../frontend/cookies/cookieHandler.js"></script>
+
 
   <link rel="stylesheet" href="../css/pageLogin.css"> 
-  <script src="../../frontend/js/api/ApiConnection.js" ></script>
+
  
  <script >
     document.addEventListener("DOMContentLoaded", function(){
         var form = document.getElementById("login");
-        //var resultResultDiv = document.getElementById('request _result');
-       
+        var errorMessages = {
+            "badRequest":"Invalide credential",
+            "error":"Invalide credential"
+        }
+        const errorhandling = new ServerErrorHandling(errorMessages);
+
         form.addEventListener("submit", function(event) {
-            
+            errorhandling.refresh();
             event.preventDefault();
             var email = document.getElementById('email').value;
             var password = document.getElementById('password').value;
@@ -34,9 +50,12 @@
 
             connection.postRequest(data,(error, response)=>{
                 if(error){
-                    resultResultDiv.innerHTML = 'Login failed: ' + error;                                
+                   errorhandling.handleError(error);                            
                 } else {
-                    response; 
+                    console.log("here");
+                   setCookie('Token',response,24);
+                   window.location.href = "userDashBoard.html";
+                   console.log("here");
                 }
             });
         });
@@ -56,8 +75,10 @@
                 <label for="password">Mot de passe</label>
                 <input type="password" id="password" placeholder="********" required>
             </div>
+            <span id="badRequest" class="error-msg"></span>
             <button type="submit">Se connecter</button>
         </form>
+        
         <div class="footer">
             <p>Pas encore inscrit ? <a href="pageSignIn.html">Créer un compte</a></p>
         </div>

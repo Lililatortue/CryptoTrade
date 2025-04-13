@@ -1,4 +1,3 @@
-
 <!doctype html>
 
 <html lang="en"> 
@@ -13,8 +12,7 @@
   <script src="../../frontend/errorhandling/ServerError.js" ></script>
 
   <link rel="stylesheet" href="../css/pageSignIn.css"> 
-  
-  
+
   
     <script >
         function calculateAge(age){// pas parfait fait just comparer 2 anne
@@ -24,7 +22,7 @@
         }
         document.addEventListener("DOMContentLoaded", function(){
             var form = document.getElementById("register");
-
+            //list de message errer
             var errorMessages = {
                     "username":"Invalid username ",
                     "email": "invalide email",
@@ -33,6 +31,7 @@
                     "password": "Le mot de passe doit avoir une majuscule, 1 char special et 3 chiffres",
                     "badRequest":"incapable de proceder la requete"
             };
+            //load les messages
             const errorhandling = new ServerErrorHandling(errorMessages);
 
             form.addEventListener("submit", function(event) {
@@ -62,7 +61,6 @@
 
                 connection.postRequest(data,(error, response)=>{
                     if(error){
-                        console.log(error)
                         errorhandling.handleError(error);                               
                     } else {
                         window.location.href = "pageLogin.html";

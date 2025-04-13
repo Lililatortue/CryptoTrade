@@ -23,8 +23,8 @@ function findOneUser($data){
     if($user){
         return $user;
     } else {
-        http_response_code(404);
-        echo json_encode(["error"=>"no data found"]) ;
+        http_response_code(400);
+        echo json_encode(["badRequest"=>"no data found"]) ;
         exit;
     }
 }
