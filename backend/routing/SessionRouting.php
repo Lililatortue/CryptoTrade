@@ -16,7 +16,7 @@ function SessionRouter($data,$route){
                                          $logger->logging($_SERVER['REMOTE_ADDR'],$_SERVER['HTTP_USER_AGENT'],$route,$resultat);
                                          return $resultat;
 
-        case "POST/session/validateToken":$logger->startTimer();
+        case "GET/session/validateToken":$logger->startTimer();
                                          $resultat=validateToken($data);
                                          (http_response_code()==200) ? $logger ->setTrue(): $logger->setFalse();
                                          $logger->EndTimer();

@@ -16,7 +16,7 @@ aderer au principe SOLID
 
 
 # Gestion de crypto-monnaies
-- [ ] Le super admin peut ajouter de nouvelles crypto-monnaies à la plateforme (nom, symbole, prix initial)
+- [x] Le super admin peut ajouter de nouvelles crypto-monnaies à la plateforme (nom, symbole, prix initial)
 - [ ] Stockage des informations sur chaque crypto-monnaie dans la base de données.
 - [ ] Consultation de la liste des crypto-monnaies disponibles par tous les utilisateurs.
 - [ ] Voir historique du crypto-monnaie et consulter leur prix en temps reel.

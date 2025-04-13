@@ -105,3 +105,12 @@ create procedure getRendementMoyen ()
         GROUP BY t.username,
         ORDER BY avg_total DESC
     END
+
+
+
+
+    INSERT INTO crypto (symbole, name, price_usd, quantity, market_cap, total_supply, created_date)
+VALUES 
+('BTC', 'Bitcoin', 65000, 0.35, 120000000000, 21000000, '2023-10-01 12:00:00'),
+('ETH', 'Ethereum', 3500, 5.2, 50000000000, 120000000, '2023-10-02 13:30:00'),
+('USDT', 'Tether', 1.00, 1500, 83000000000, 85000000000, '2023-10-03 09:45:00');

@@ -52,10 +52,8 @@ session_start();
                 if(error){
                    errorhandling.handleError(error);                            
                 } else {
-                    console.log("here");
-                   setCookie('Token',response,24);
+                   setCookie('Token',response.token,24);
                    window.location.href = "userDashBoard.html";
-                   console.log("here");
                 }
             });
         });
@@ -69,11 +67,11 @@ session_start();
         <form id="login" >
             <div class="input-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" placeholder="exemple@email.com" required>
+                <input type="email" id="email" placeholder="exemple@email.com" value="wiwi1@gmail.com" required>
             </div>
             <div class="input-group">
                 <label for="password">Mot de passe</label>
-                <input type="password" id="password" placeholder="********" required>
+                <input type="password" id="password" placeholder="********" value="Hrew!123lrety"required>
             </div>
             <span id="badRequest" class="error-msg"></span>
             <button type="submit">Se connecter</button>

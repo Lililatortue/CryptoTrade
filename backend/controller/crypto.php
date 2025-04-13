@@ -51,25 +51,24 @@
 
     function fetchAllCrypto(){
         $db=DatabaseConnection::getInstance();
-        $token = validateToken();       
-        if(empty($token)){
-            http_response_code(401);
-            return [("error: invalid credential")];
-        }
 
         try{
             $stmt = $db->getConnection()->prepare("SELECT * FROM crypto");
+            $stmt->execute();
             $crypto=$stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch(Exception $e){
             http_response_code(500);
-            return [("erreur: erreur logique  fetchAllCrypto.")];
+            echo json_encode(["erreur" => "erreur logique  fetchAllCrypto."]);
+            exit;
         }
-        if($crypto){
+        if(!empty($crypto)){
             http_response_code(200);
-            return ["crypto"=>$crypto];
+            echo json_encode($crypto);
+            exit;
         } else {
             http_response_code(400);
-            return [("Un erreur est survenu durant la recherche des cryptos")];
+            echo json_encode(["erreur" =>" list de crypto vide"]);
+            exit;
         }
 
     }
@@ -88,14 +87,17 @@
             $crypto=$stmt->fetch(PDO::FETCH_ASSOC);
         } catch(Exception $e){
             http_response_code(500);
-            return [("erreur: erreur logique findOneCrypto.")];
+            echo json_encode(["erreur: erreur logique findOneCrypto."]);
+            exit;
         }
         if($crypto){
             http_response_code(200);
-            return ["crypto"=>$crypto];
+            echo json_encode(["crypto"=>$crypto]);
+            exit;
         } else {
             http_response_code(400);
-            return [("Un erreur est survenu durant la recherche des cryptos")];
+            echo json_encode(["error"=>"Un erreur est survenu durant la recherche des cryptos"]);
+            exit;
         }
     }
 

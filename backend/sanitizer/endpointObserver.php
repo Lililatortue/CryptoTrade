@@ -5,6 +5,7 @@ class endpointObserver{
     
 
     function sanitize(&$info){
+        if(empty($info))return;
         foreach($info as $key => &$data){
                 $data=htmlspecialchars($data);       
         }
