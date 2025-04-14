@@ -55,68 +55,6 @@ create table transaction(
     constraint FK_trans_crypto_id  FOREIGN KEY (crypto_id) REFERENCES crypto(id)
 );
 
--- vue contient le resultat des requete preparer--
-create view v_transaction(
-    SELECT  
-        t.id AS trans_id,
-        t.quantite,
-        t.transaction_type,
-        t.transaction_date,
-        u.id as user_id,
-        u.username,
-        c.id AS crypto_id,
-        c.crypto_name,
-        c.valeur,
-        p.id AS porte_id
-        p.trans_id
-    From  transaction t
-    JOIN  user u         ON t.user_id = u.id;
-    JOIN  crypto c       ON t.crypto_id = c.crypto_id;
-    JOIN  portefeuille p ON t.trans_id = p.trans_id;
-    
-)
-
-create procedure getUserTransaction ( p_user_id INT )
-    BEGIN
-        SELECT username,
-               SUM(quantite * valeur) as total
-        FROM v_transaction
-       
-        WHERE user_id = p_user_id;
-    END 
-
-create procedure getRendementMoyen ()
-    BEGIN 
-        SELECT username,
-               AVG( CASE 
-                        WHEN t.transaction_type = 'SELL' 
-                        THEN ((t.quantite * t.valeur) - (p.quantite * p.achat_date)) / (p.quantite * p.achat_date) * 100
-                        ELSE NULL
-                    END
-                ) as avg_total
-        FROM v_transaction t, portefeuille p,
-            WHERE t.user_id = p.user_id 
-            AND t.crypto_id = p.crypto_id
-        GROUP BY t.username
-    END
-
-    create procedure getRendementMoyenParPerformance()
-    BEGIN 
-        SELECT username,
-               AVG( CASE 
-                        WHEN t.transaction_type = 'SELL' 
-                        THEN ((t.quantite * t.valeur) - (p.quantite * p.achat_date)) / (p.quantite * p.achat_date) * 100
-                        ELSE NULL
-                    END
-                ) as avg_total
-        FROM v_transaction t, portefeuille p,
-            WHERE t.user_id = p.user_id 
-            AND t.crypto_id = p.crypto_id
-        GROUP BY t.username,
-        ORDER BY avg_total DESC
-    END
-
-
 INSERT INTO crypto (symbole, name, price_usd, quantity, market_cap, total_supply, date_created)
 VALUES 
 ('BTC', 'Bitcoin', 65000, 0.35, 120000000000, 21000000, '2023-10-01 12:00:00'),
