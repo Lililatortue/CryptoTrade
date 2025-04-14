@@ -15,9 +15,11 @@ class ApiConnection{
         this.xmlRequest.open("GET", this.fullroute + this.endpoint);
         this.xmlRequest.setRequestHeader("Content-Type", "application/json");
         this.xmlRequest.onload = () => {
+            
             let responseText = this.xmlRequest.responseText;
             if (this.xmlRequest.status >= 200 && this.xmlRequest.status < 300) {
                 const data = JSON.parse(responseText);
+                
                 callback(null,data);
             } else {
                 const error = JSON.parse(responseText);
@@ -67,6 +69,7 @@ class ApiConnection{
         this.xmlRequest.setRequestHeader("Content-Type", "application/json");
 
         const token = getCookie("Token");
+        console.log(token);
         if (token) {
             this.xmlRequest.setRequestHeader("Authorization",`Bearer ${token}`);
         }

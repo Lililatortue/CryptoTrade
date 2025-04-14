@@ -50,7 +50,7 @@ class logger{
     }
     //functions
     //calculer le temps que sa prends faire une reponse 
-    public function startTimer(){
+    private function startTimer(){
         $this->start = microtime(true);
     }
     public function EndTimer(){
@@ -58,7 +58,15 @@ class logger{
         $this->action_time=( $end - $this->start )*1000;
         $this->end=null;
     }
+    public function log(callable $func, $ip, $web_browser, $routes){
+        $this->setTrue();
+        $this->startTimer();
 
+        if(empty($resultat = $func()) ) $this->setFalse();
+
+        $this->EndTimer();
+        $this->logging($ip,$web_browser,$routes);
+    }
 
     public function logging($ip,$web_browser,$routes){   
         $log_path=$this->directory.'/'.$this->month.'.log';

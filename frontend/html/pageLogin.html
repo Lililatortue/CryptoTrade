@@ -50,6 +50,7 @@ session_start();
 
             connection.postRequest(data,(error, response)=>{
                 if(error){
+                    console.log(error);
                    errorhandling.handleError(error);                            
                 } else {
                    setCookie('Token',response.token,24);
@@ -73,7 +74,7 @@ session_start();
                 <label for="password">Mot de passe</label>
                 <input type="password" id="password" placeholder="********" value="Hrew!123lrety"required>
             </div>
-            <span id="badRequest" class="error-msg"></span>
+            <span id="badRequest-error" class="error-msg"></span>
             <button type="submit">Se connecter</button>
         </form>
         

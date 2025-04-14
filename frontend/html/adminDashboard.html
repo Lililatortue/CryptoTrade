@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin dashboard</title>
+                    <!--script for api communication-->
+            <script src="../../frontend/js/api/ApiConnection.js" ></script>
+
+                    <!--script error pour le error handling -->
+            <link rel="stylesheet" href="../../frontend/errorhandling/error-css.css"> 
+            <script src="../../frontend/errorhandling/ServerError.js" ></script>
+
+                    <!--script error pour le error handling -->
+            <script src="../../frontend/cookies/cookieHandler.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/userDahboard.css"> 
+    <link rel="stylesheet" href="../css/greyTemplate.css"> 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            //connection a des routes
+            const tokenvalidation = new ApiConnection("/session/validateToken");
+            const userFetch = new ApiConnection("/user/fetchAll");
+            const cryptoCreate = new ApiConnection("/crypto/add");
+            //variable valeur du 
+            var username = document.getElementById("username"); 
+            var usernametable = document.getElementById("username-table-body");
+           
+
+            //errorHandling
+            var errorMessages = {
+            "badRequest":"Invalide credential",
+            "error":"Invalide credential"
+            }
+            const errorhandling = new ServerErrorHandling(errorMessages);
+            //token validation et donner des options dependament des roles
+            tokenvalidation.getToken((error,response)=>{
+                if(error){
+                    console.log(error);
+                    window.location.href="pageLogin.html";
+                } else {
+                    username.innerHTML = response.username;
+                    if(response.role ){//should be admin mais pour tester je les elver
+                        
+                        const input = document.getElementById("sidebar");
+                        //input.innerHTML += "<a href='adminDashboard.html'>CryptoMarket</a>";
+                    }
+                }
+            });
+
+            //fetch request pour chercher les utilisateurs
+            userFetch.getRequest((error,response)=>{
+                if(error){
+                    console.log(error);
+                } else {
+                    let row = "";
+                    response.forEach(user => {
+                         row += `
+                            <tr>
+                                <td>${user.username}</td>
+                                <td>${user.email}</td>
+                                <td>${user.pays}</td>
+                                <td>${user.age}</td>
+                                <td>${user.role}</td>
+                            </tr>`;
+                    });
+                    usernametable.innerHTML = row;
+                }
+            });
+
+        
+        var form = document.getElementById("createCrypto");
+        form.addEventListener("submit",function (event) {
+            errorhandling.refresh();
+            event.preventDefault();
+            data = {
+            "name"   : document.getElementById('name').value,
+            "symbole"       : document.getElementById('symbole').value,
+            "price_usd"     : document.getElementById('price_usd').value,
+            "quantity"      : document.getElementById('quantity').value,
+            "total_supply"  : document.getElementById('total_supply').value,
+            "market_cap"    : document.getElementById('market_cap').value,
+            "created_date"  : document.getElementById('created_date').value,
+            }
+                //createCrypto
+                cryptoCreate.postRequest(data,(error,response)=>{
+                    if(error){
+                        errorhandling.handleError(error);
+                    } else {
+                       
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+
+
+<body>
+    <div class="header">
+        <div class="logo">CryptoTrade</div>
+        <div class="user-profile">
+            <img src="../Img/CryptoTradeLogo.png" alt="User">
+            <span id="username">John Doe</span>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <a href="../html/userDashboard.html">Dashboard</a>
+        <a href="../html/userWallet.html">Wallet</a>
+        <a href="#">Market</a>
+        <a href="#">Transactions</a>
+        <a href="#">Settings</a>
+        <a href="#">Logout</a>
+    </div>
+    <div class="main-content">
+        <h2>inviter un utilisateur</h2>
+        <div class="crypto-card">
+            <button type="submit" id="created_date"> create</button>
+        </div> 
+    </div>
+    <div class="main-content">
+        <h2>Ajout des cryptos</h2>
+
+            <form id="createCrypto" class="crypto-container">
+                <div class="crypto-card">
+                        <label for="name">name</label>
+                        <input type="text" id="name" placeholder="crypto name" >
+                        <span id="name-error" class="error-msg"></span> 
+                </div> 
+
+                <div class="crypto-card">
+                        <label for="symbole">symbole</label>
+                        <input type="text" id="symbole" placeholder="$$$" >
+                        <span id="symbole-error" class="error-msg"></span>
+                </div>  
+
+                <div class="crypto-card">          
+                        <label for="price_usd">price USD</label>
+                        <input type="text" id="price_usd" placeholder="20" >
+                        <span id="price_usd-error" class="error-msg"></span>
+                </div>     
+
+                <div class="crypto-card">
+                        <label for="quantity">quantity</label>
+                        <input type="number" id="quantity" placeholder=1000 min=0 >
+                        <span id="quantity-error" class="error-msg" ></span>
+                </div> 
+
+                <div class="crypto-card">          
+                    <label for="total_supply">total supply</label>
+                    <input type="number" id="total_supply" placeholder=1200000 >
+                    <span id="total_supply-error" class="error-msg"></span>
+                </div>     
+
+                <div class="crypto-card">
+                    <label for="market_cap">market cap</label>
+                    <input type="number" id="market_cap" placeholder=1200000 min=0 >
+                    <span id="market_cap-error" class="error-msg" ></span>
+                </div>
+
+                <div class="crypto-card">
+                    <label for="created_date">created date</label>
+                    <input type="date" id="created_date"  >
+                    <span id="created_date-error" class="error-msg" ></span>
+                </div>
+                <div class="crypto-card">    
+                    <button type="submit" id="created_date"> create</button>
+                </div>
+            </form>
+
+    </div>
+        <div class="main-content"> <!--ajout des charts-->
+            <h2>List des utilisateurs</h2> 
+            <table class="utilisateur-table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Pays</th>
+                        <th>Age</th>
+                        <th>Role</th>
+                    </tr>
+                </thead>
+                <tbody id="username-table-body">
+                    <!-- Data loaded dynamically -->
+                </tbody>
+            </table>
+        </div>
+</body>

@@ -1,0 +1,40 @@
+.crypto-container {
+    
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  .crypto-card {
+    background-color: #454444;
+    border-radius: 2px;
+    padding: 20px;
+    color: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  }
+  .crypto-card label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #fff;
+  }
+  .crypto-card input {
+    width: 100%;
+    padding: 6px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  .crypto-card.wide {
+    grid-column: span 2;
+  }
+  .crypto-card button {
+    grid-column: span 2;
+    width: 100%;
+    padding: 6px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    align-items: center;
+  }
+  

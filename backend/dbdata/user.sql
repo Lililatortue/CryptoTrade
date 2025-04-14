@@ -4,13 +4,14 @@ create table user(
     email VARCHAR(150) unique not null,
     pays VARCHAR(50) not null,
     age INT not null,
+    date_creation DATE not null,
     password VARCHAR(150) not null,
     salt BINARY(16) not null
 );
 
 create table crypto(
-    id VARCHAR PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) unique NOT NULL,
     symbole VARCHAR(10) NOT NULL,
     price_usd DECIMAL() NOT NULL ,
     quantity NUMBER not null,
