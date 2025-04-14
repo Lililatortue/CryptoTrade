@@ -16,6 +16,7 @@ create table crypto(
     name VARCHAR(50) NOT NULL,
     symbole VARCHAR(10) NOT NULL,
     price_usd DECIMAL NOT NULL ,
+    volatility DECIMAL(5, 2), -- Volatilité de la cryptomonnaie
     quantity DECIMAL not null,
     total_supply BIGINT ,
     market_cap BIGINT,
