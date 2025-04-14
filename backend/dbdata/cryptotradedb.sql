@@ -34,11 +34,11 @@ CREATE TABLE historique(
 
 -- junction table
 create table portefeuille(
-    user_id INT PRIMARY KEY,
+    user_id INT ,
     crypto_id INT, 
     quantite DECIMAL null,
     achat_data DECIMAL null,
-    unique(user_id,crypto_id),
+    PRIMARY KEY(user_id,crypto_id),
     constraint FK_user_id    FOREIGN KEY (user_id) REFERENCES utilisateur(id),
     constraint FK_crypto_id  FOREIGN KEY (crypto_id) REFERENCES crypto(id)
 );
