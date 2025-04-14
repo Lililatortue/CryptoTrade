@@ -33,7 +33,7 @@ header("Content-Type: application/json");
 $methods = $_SERVER['REQUEST_METHOD'];
 $uri = strtok($_SERVER['REQUEST_URI'], '?');
 
-$basePath = "/backend/routing/MacroRouting.php/";
+$basePath = "/CryptoTrade/backend/routing/MacroRouting.php/"; //marco NOTE : Update here
 if (strpos($uri, $basePath) === 0) {
     $uri = substr($uri, strlen($basePath));
 }
