@@ -1,5 +1,5 @@
 <?php
-require_once "../vendor/autoload.php";
+require_once "../../vendor/autoload.php"; //added '../'
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;

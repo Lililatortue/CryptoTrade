@@ -2,7 +2,7 @@
 
 class ApiConnection{
     xmlRequest;
-    fullroute="http://Cryptotrade.local.lan/backend/routing/MacroRouting.php";
+    fullroute="http://localhost/CryptoTrade/backend/routing/MacroRouting.php";
     endpoint;
     constructor(route){
         this.endpoint = route;
@@ -39,6 +39,8 @@ class ApiConnection{
         this.xmlRequest.onload = () => {
             let responseText = this.xmlRequest.responseText;
             if (this.xmlRequest.status >= 200 && this.xmlRequest.status < 300) { 
+
+                console.log(responseText);
                 const data = JSON.parse(responseText);
                 try {
                     callback(null, data);
