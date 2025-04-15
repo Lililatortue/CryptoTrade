@@ -1,7 +1,8 @@
 <?php
-include "../routing/UserRouting.php";
-include "../routing/CryptoRouting.php";
-include "../routing/SessionRouting.php";
+include "../controller/controllerUser.php";
+include "../controller/controllerWallet.php";
+include "../controller/controllerCrypto.php";
+include "../controller/controllerSession.php";
 include "../sanitizer/endpointObserver.php";
 include "../sanitizer/logger.php";
 
@@ -33,7 +34,7 @@ header("Content-Type: application/json");
 $methods = $_SERVER['REQUEST_METHOD'];
 $uri = strtok($_SERVER['REQUEST_URI'], '?');
 
-$basePath = "/backend/routing/MacroRouting.php/";
+$basePath = "/backend/routing/routing.php/";
 if (strpos($uri, $basePath) === 0) {
     $uri = substr($uri, strlen($basePath));
 }

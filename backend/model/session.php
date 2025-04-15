@@ -27,7 +27,6 @@ function login($data){
     if($hash==$user['password']){
         http_response_code(200);
         MakeToken($user);
-
         return ;
     } else {
         http_response_code(401);
@@ -36,8 +35,7 @@ function login($data){
     }
 }
 
-function validateToken(){
-
+function validateToken($restult=false){
     $header = apache_request_headers();
     $jwt = null;
     if(isset($header['Authorization'])){
@@ -45,8 +43,7 @@ function validateToken(){
         if (preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
             $jwt = $matches[1]; // Extract the token part
         }
-    }
-       
+    } 
 
     if (empty($jwt)) {
         http_response_code(401);
@@ -58,10 +55,10 @@ function validateToken(){
     try{
         $decoded = JWT::decode($jwt,new Key($key,'HS256'));
         http_response_code(200);
-        echo json_encode($decoded);
+        if($restult == true)
+            echo json_encode($decoded);
         return $decoded;
     } catch(Exception $e){
-        ob_clean(); 
         http_response_code(401);
         echo json_encode(['error'=>"Unauthorize"]);
         return;

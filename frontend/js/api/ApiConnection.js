@@ -2,7 +2,7 @@
 
 class ApiConnection{
     xmlRequest;
-    fullroute="http://Cryptotrade.local.lan/backend/routing/MacroRouting.php";
+    BasePath="http://Cryptotrade.local.lan/backend/routing/routing.php";
     endpoint;
     constructor(route){
         this.endpoint = route;
@@ -12,7 +12,7 @@ class ApiConnection{
         this.endpoint = endpoint;
     }
     getRequest(callback) { 
-        this.xmlRequest.open("GET", this.fullroute + this.endpoint);
+        this.xmlRequest.open("GET", this.BasePath + this.endpoint);
         this.xmlRequest.setRequestHeader("Content-Type", "application/json");
         this.xmlRequest.onload = () => {
             
@@ -35,7 +35,7 @@ class ApiConnection{
     };
 
     postRequest(data, callback) {
-        this.xmlRequest.open("POST", this.fullroute + this.endpoint);
+        this.xmlRequest.open("POST", this.BasePath + this.endpoint);
         this.xmlRequest.setRequestHeader("Content-Type", "application/json");
     
         this.xmlRequest.onload = () => {
@@ -65,7 +65,7 @@ class ApiConnection{
     };
 
     getToken(callback) {
-        this.xmlRequest.open("GET", this.fullroute + "/session/validateToken");
+        this.xmlRequest.open("GET", this.BasePath + "/session/validateToken");
         this.xmlRequest.setRequestHeader("Content-Type", "application/json");
 
         const token = getCookie("Token");

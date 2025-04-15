@@ -23,13 +23,12 @@ create table crypto(
 
 --junction table
 create table portefeuille(
-    user_id INT  primary key,
-    crypto_id VARCHAR, 
-    quantite Number null,
-    achat_data Number null,
-    unique(user_id,crypto_id),
-    constraint FK_user_id    Foreign key (user_id) REFERENCES user(id),
-    constraint FK_crypto_id  Foreign key (crypto_id) REFERENCES crypto(id)
+    user_email VARCHAR(150) not null,
+    crypto_name VARCHAR(50) not null, 
+    quantite INT not null,
+    primary key(user_email,crypto_name),
+    constraint FK_user_email    Foreign key (user_email) REFERENCES utilisateur(email),
+    constraint FK_crypto_name  Foreign key (crypto_name) REFERENCES crypto(name)
 )
 
 create table transaction(

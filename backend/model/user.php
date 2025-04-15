@@ -12,19 +12,24 @@ function findOneUser($data,$return=true){
   
     } catch (Exception $e) {
         //error handling server error
-        http_response_code(500);
-        header("Content-Type: application/json");
-        echo json_encode(["error"=>"logical erreur findOneUser"]);
-        return;
+        if($return === true){
+            http_response_code(500);
+            header("Content-Type: application/json");
+            echo json_encode(["DBError"=>"logical erreur findOneUser"]);
+        }
+        return false;
     }
-    if($user){
-        http_response_code(200);
-        if($return === true)
+    if($user){ 
+        if($return === true){
+            http_response_code(200);
             echo json_encode($user);
+        }  
         return $user;
     } else {
-        http_response_code(400);
-        echo json_encode(["badRequest"=>"no data found"]) ;
+        if($return === true){
+            http_response_code(400);
+            echo json_encode(["BadRequest"=>"no data found"]) ;
+        }
         return;
     }
 }
@@ -44,7 +49,7 @@ function fetchAllUser(){
     } catch(PDOException $e){
         http_response_code(500);
         header("Content-Type: application/json");
-        echo json_encode(["error"=>"logical erreur fetchAllUser"]);
+        echo json_encode(["DBError"=>"logical erreur fetchAllUser"]);
         return;
     }
     if(!empty($users)){
@@ -75,7 +80,7 @@ function createUser($data){
                                 ":password" =>$hash,
                                 ":salt" =>$salt]);
     } catch(PDOException $e){
-        http_response_code(400);
+        http_response_code(500);
         if($e->getCode() == 23000){//duplicate key   
             header("Content-Type: application/json");
             echo json_encode(["badRequest"=>"email already exist"]);
@@ -102,7 +107,7 @@ function updateUser($data){
         $bool = $stmt -> execute(createExecute($data));
     } catch(Exception $e){
         http_response_code(500);
-        echo json_encode(["erreur"=>"erreur logique  updateUser."]);
+        echo json_encode(["DBError"=>"erreur logique  updateUser."]);
         return;
     }
 
@@ -112,7 +117,7 @@ function updateUser($data){
         return $bool;
     } else {
         http_response_code(400);
-        echo json_encode(["erreur"=>"un erreur est survenu durant la mise a jour de l'utilisateur."]);
+        echo json_encode(["error"=>"un erreur est survenu durant la mise a jour de l'utilisateur."]);
         return;
     }
 }
@@ -124,16 +129,16 @@ function deleteUser($data){
         $bool = $stmt -> execute(["id"=>$data['id']]);     
     } catch (Exeception $e) {
         http_response_code(500);
-        echo json_encode(["erreur: erreur logique deleteUser."]);
+        echo json_encode(["DBError"=> "erreur logique deleteUser."]);
         return;
     }
     if($bool){
         http_response_code(200);
-        echo json_encode(["utilisateur efface avec succes"]);
+        echo json_encode(["succes"=>"utilisateur efface avec succes"]);
         return $bool;
     } else {
         http_response_code(400);
-        echo json_encode(["un erreur est survenu durant l'effacement de l'utilisateur."]);
+        echo json_encode(["error"=>"un erreur est survenu durant l'effacement de l'utilisateur."]);
         return;
     }
 }

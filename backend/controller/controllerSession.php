@@ -1,5 +1,5 @@
 <?php
-include "../controller/session.php";
+include "../model/session.php";
 
 
 

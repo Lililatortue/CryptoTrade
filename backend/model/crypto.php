@@ -24,7 +24,7 @@
         if($bool){
             http_response_code(200);
             json_encode(["succes: crypto succesfully created."]);
-            return;
+            return $bool;
         } else {
             http_response_code(400);
             json_encode(["erreur"=>"un erreur est survenu durant la creation du crypto."]);
@@ -61,7 +61,7 @@
             $crypto=$stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch(Exception $e){
             http_response_code(500);
-            echo json_encode(["erreur" => "erreur logique  fetchAllCrypto."]);
+            echo json_encode(["DBError" => "erreur logique  fetchAllCrypto."]);
             return;
         }
         if(!empty($crypto)){
@@ -70,13 +70,13 @@
             return $crypto;
         } else {
             http_response_code(400);
-            echo json_encode(["erreur" =>" list de crypto vide"]);
+            echo json_encode(["error" =>" list de crypto vide"]);
             return;
         }
 
     }
 
-    function findOneCrypto($data){
+    function findOneCrypto($data, $result = false){
         $db=DatabaseConnection::getInstance();
         $token = validateToken();       
         if(empty($token)){
@@ -90,18 +90,24 @@
             $stmt -> execute([":crypto_name"=>$data['crypto_name']]);
             $crypto=$stmt->fetch(PDO::FETCH_ASSOC);
         } catch(Exception $e){
-            http_response_code(500);
-            echo json_encode(["erreur: erreur logique findOneCrypto."]);
-            return;
+            if($result === true){
+                http_response_code(500);
+                echo json_encode(["DBError: erreur logique findOneCrypto."]);
+            }
+            return false;
         }
         if($crypto){
-            http_response_code(200);
-            echo json_encode($crypto);
+            if($result === true){
+                http_response_code(200);
+                echo json_encode($crypto);
+            }
             return $crypto;
         } else {
-            http_response_code(400);
-            echo json_encode(["error"=>"Un erreur est survenu durant la recherche des cryptos"]);
-            return;
+            if($result === true){
+                http_response_code(400);
+                echo json_encode(["error"=>"Un erreur est survenu durant la recherche des cryptos"]);
+            }
+            return false;
         }
     }
 
