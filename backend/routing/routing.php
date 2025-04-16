@@ -46,19 +46,19 @@ $action = function($data) use($methods,$uri,$observer){
     switch(getRouter($uri)){
 
       //route user management
-        case "user" : return UserRouter($data,$route);break;
+        case "user" : return userController($data,$route);break;
       
       //session management
-        case "session": return SessionRouter($data,$route);break;
+        case "session": return sessionController($data,$route);break;
 
       //route crypto management
-        case "crypto":return CryptoRouter($data,$route);break;
+        case "crypto":return cryptoController($data,$route);break;
                                   
       //route portefeuille management
-        case "wallet": return WalletRouter($data,$route);break;
+        case "wallet": return walletController($data,$route);break;
       
       //route statistique management
-        case "stats":return statsManager($data,$route);break;
+        case "statistique":return statistiqueController($data,$route);break;
         
         default: {http_response_code(404); return ["erreur, route non-existante"];}//bad request;
     }

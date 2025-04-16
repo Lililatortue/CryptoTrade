@@ -1,7 +1,7 @@
 <?php
 include "../model/crypto.php";
 
-function CryptoRouter($data,$route){
+function cryptoController($data,$route){
     $logger=$_SESSION['LOGGER_ACTION'];
     $observer = new endpointObserver();
     

@@ -1,5 +1,6 @@
 <?php
 include_once "../model/wallet.php";
+include_once "../model/transaction.php";
 /*data requis est le email,
   le nom du crypto 
   la quantite acheter
@@ -20,6 +21,8 @@ function buy($data,$return=true){
         foreach($wallet as $crypto){
             if($crypto['crypto_name']==$data['crypto_name']){
                  $detiens= true;
+                 $data['transaction_type']="buy";
+                 $bool = transactionAdd($data);
                  $data['qte']+=$crypto['quantite'];
                 break;
             }
@@ -29,14 +32,14 @@ function buy($data,$return=true){
         } else {
             $bool = walletAdd($data);
         }
-       
+        
         if ($bool) {
             http_response_code(200);
-            echo json_encode(["success" => "Transaction reussi"]);
+            echo json_encode(["success" => "achat reussi"]);
             return $bool;
         } else {
             http_response_code(400);
-            echo json_encode(["error" => "Transaction echouer"]);
+            echo json_encode(["error" => "achat echouer"]);
             return;
         }
     } catch (Exception $e) {
@@ -61,6 +64,8 @@ function sell($data){
         $detiens = false;
         foreach($wallet as $crypto){
             if($crypto['crypto_name']==$data['crypto_name']){
+                $data['transaction_type']="sell";
+                $bool = transactionAdd($data);
                  $detiens= true;
                 break;
             }
@@ -70,7 +75,7 @@ function sell($data){
             echo json_encode(["InvalideCommande"=> "ne detiens pas le crypto"]);
             return;
         }
-
+        
         if ($data['qte'] <= $crypto['quantite']) {
             $data['qte'] = $crypto['quantite'] - $data['qte'];
         } else {
@@ -83,6 +88,16 @@ function sell($data){
             $bool = walletDelete($data); 
         } else {
             $bool = walletUpdate($data);
+        }
+
+        if ($bool) {
+            http_response_code(200);
+            echo json_encode(["success" => "vente reussi"]);
+            return $bool;
+        } else {
+            http_response_code(400);
+            echo json_encode(["error" => "vente echouer"]);
+            return;
         }
         
     } catch (Exeception $e) {

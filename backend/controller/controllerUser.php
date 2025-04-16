@@ -1,7 +1,7 @@
 
 <?php
 include "../model/user.php";
-function UserRouter($data,$route){
+function userController($data,$route){
   $logger=$_SESSION['LOGGER_ACTION'];
   $observer = new endpointObserver();
     switch($route){

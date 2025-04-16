@@ -18,41 +18,29 @@
                             ':created_date'      =>$data['created_date'],]);
         } catch(Exception $e){
             http_response_code(500);
-            json_encode(["erreur" => "erreur logique  createCrypto."]);
+            echo json_encode(["erreur" => "erreur logique  createCrypto."]);
             return;
         }
         if($bool){
             http_response_code(200);
-            json_encode(["succes: crypto succesfully created."]);
+            echo json_encode(["succes: crypto succesfully created."]);
             return $bool;
         } else {
             http_response_code(400);
-            json_encode(["erreur"=>"un erreur est survenu durant la creation du crypto."]);
+            echo json_encode(["erreur"=>"un erreur est survenu durant la creation du crypto."]);
             return;
         }
     }
 
-    // function updateCrypto(){
-    //     $db = DatabaseConnection::getInstance();
-    //     //bad error handling
-    //     try{
-    //         $stmt = $db->getConnection() -> prepare(createString($data));
-    //         $bool = $stmt -> execute(createExecute($data));
-    //     } catch(Exception $e){
-    //         http_response_code(500);
-    //         return ["erreur: erreur logique  updateCrypto."];
-    //     }
-    
-    //     if($bool){
-    //         http_response_code(200);
-    //         return ["utilisatcryptoeur changer avec succes."];
-    //     } else {
-    //         http_response_code(400);
-    //         return ["un erreur est survenu durant la mise a jours du crypto."];
-    //     }
-    // }
+    function updatePriceCrypto($db,$data){
+        $stmt = $db->prepare("UPDATE crypto SET price_usd = :price_usd WHERE name = :name");
+        return $stmt->execute([
+            ':price_usd' => $data['price_usd'],
+            ':name' => $data['name']
+        ]);
+     }
 
-    function fetchAllCrypto(){
+    function fetchAllCrypto($result=false){
         $db=DatabaseConnection::getInstance();
 
         try{
@@ -60,17 +48,23 @@
             $stmt->execute();
             $crypto=$stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch(Exception $e){
-            http_response_code(500);
-            echo json_encode(["DBError" => "erreur logique  fetchAllCrypto."]);
+            if($result === true){
+                http_response_code(500);
+                echo json_encode(["DBError" => "erreur logique  fetchAllCrypto."]);
+            }
             return;
         }
         if(!empty($crypto)){
-            http_response_code(200);
-            echo json_encode($crypto);
+            if($result === true){
+                http_response_code(200);
+                echo json_encode($crypto);
+            }
             return $crypto;
         } else {
-            http_response_code(400);
-            echo json_encode(["error" =>" list de crypto vide"]);
+            if($result === true){
+                http_response_code(400);
+                echo json_encode(["error" =>" list de crypto vide"]);
+            }
             return;
         }
 

@@ -33,16 +33,23 @@ create table portefeuille(
 
 create table transaction(
     id int AUTO_INCREMENT primary key,
-    user_id INT  primary key,
-    crypto_id VARCHAR,
-    quantite Number null,
-    transaction_type Number null,
+    user_email VARCHAR(150) not null,
+    crypto_name VARCHAR(50) not null,
+    quantite int not null,
+    transaction_type VARCHAR(10) not null,
     transaction_date DATE DEFAULT CURRENT_TIMESTAMP,
-    unique(user_id,crypto_id),
-    constraint FK_user_id    Foreign key (user_id) REFERENCES user(id),
-    constraint FK_crypto_id  Foreign key (crypto_id) REFERENCES crypto(id)
+    constraint FK_user_id    Foreign key (user_email) REFERENCES utilisateur(email),
+    constraint FK_crypto_id  Foreign key (crypto_name) REFERENCES crypto(name)
 )
 
+-- table qui sert pour le graph. historique de crypto
+CREATE TABLE historique(
+    crypto_name VARCHAR(50) NOT NULL, 
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP,  
+    closing_price DECIMAL(15, 2) NOT NULL, 
+    PRIMARY KEY (crypto_name, update_time), 
+    Constraint FK_historique_crypto_name FOREIGN KEY (crypto_name) REFERENCES crypto(name)
+);
 --vue contient le resultat des requete preparer--
 create view v_transaction(
     SELECT  
@@ -64,14 +71,6 @@ create view v_transaction(
     
 )
 
-create procedure getUserTransaction ( p_user_id INT )
-    BEGIN
-        SELECT username,
-               SUM(quantite * valeur) as total
-        FROM v_transaction
-       
-        WHERE user_id = p_user_id;
-    END 
 
 
 

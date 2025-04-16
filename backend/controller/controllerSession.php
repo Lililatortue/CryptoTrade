@@ -3,7 +3,7 @@ include "../model/session.php";
 
 
 
-function SessionRouter($data,$route){
+function sessionController($data,$route){
     $logger=$_SESSION['LOGGER_ACTION'];
     $observer = new endpointObserver();
 
