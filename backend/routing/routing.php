@@ -3,6 +3,7 @@ include "../controller/controllerUser.php";
 include "../controller/controllerWallet.php";
 include "../controller/controllerCrypto.php";
 include "../controller/controllerSession.php";
+include "../controller/controllerTransaction.php";
 include "../sanitizer/endpointObserver.php";
 include "../sanitizer/logger.php";
 
@@ -56,7 +57,10 @@ $action = function($data) use($methods,$uri,$observer){
                                   
       //route portefeuille management
         case "wallet": return walletController($data,$route);break;
-      
+
+      //route statistique management
+       case "transaction":return transactionController($data,$route);break;
+
       //route statistique management
         case "statistique":return statistiqueController($data,$route);break;
         

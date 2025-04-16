@@ -26,11 +26,18 @@ function transactionAdd($data){
     }
 }
 
-function transactionFindOne($data){
+function transactionFindOne(){
     $db = DatabaseConnection::getInstance();
+    $token = validateToken(false);     
+    if(empty($token)){
+       http_response_code(401);
+        echo json_encode(["InvalidCredential" => "Invalid credential"]);
+        return;
+    }
+
     try{
         $stmt = $db->getConnection() -> prepare("SELECT * FROM transaction WHERE user_email = :user_email");
-        $stmt -> execute([":user_email"=>$data["email"]]);
+        $stmt -> execute([":user_email"=>$token->email]);
         $transaction=$stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch(Exception $e){
         http_response_code(500);
@@ -51,7 +58,12 @@ function transactionFindOne($data){
 
 function transactionFetchAll(){
     $db = DatabaseConnection::getInstance();
-
+    $token = validateToken(false);     
+    if(empty($token) && $token->role != "admin"){
+       http_response_code(401);
+        echo json_encode(["InvalidCredential" => "Invalid credential"]);
+        return;
+    }
     try{
         $stmt = $db->getConnection() -> prepare("SELECT * FROM transaction");
         $stmt -> execute([]);
@@ -72,4 +84,5 @@ function transactionFetchAll(){
         return;
     }
 }
+
 ?>

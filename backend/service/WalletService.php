@@ -5,22 +5,24 @@ include_once "../model/transaction.php";
   le nom du crypto 
   la quantite acheter
 */
-function buy($data,$return=true){
+function buy($data){
     $db = DatabaseConnection::getInstance();
-    // $token = validateToken(false);       
-    //     if(empty($token)){
-    //         http_response_code(401);
-    //         echo json_encode(["InvalidCredential" => "Invalid credential"]);
-    //         return;
-    //     }
+    $token = validateToken(false);       
+         if(empty($token)){
+             http_response_code(401);
+             echo json_encode(["InvalidCredential" => "Invalid credential"]);
+             return;
+         }
     try{   
         //TODO::inclure strip
 
-        $wallet = walletFindOne($data,false);
+        $wallet = walletFindOne(false,false);
         $detiens = false;
+        $data['email'] = $token->email;
         foreach($wallet as $crypto){
             if($crypto['crypto_name']==$data['crypto_name']){
                  $detiens= true;
+                
                  $data['transaction_type']="buy";
                  $bool = transactionAdd($data);
                  $data['qte']+=$crypto['quantite'];
@@ -53,17 +55,13 @@ function buy($data,$return=true){
 
 function sell($data){
     $db = DatabaseConnection::getInstance();
-    // $token = validateToken();       
-    //     if(empty($token)){
-    //         http_response_code(401);
-    //         echo json_encode(["InvalidCredential" => "Invalid credential"]);
-    //         return;
-    //     }
     try{
-        $wallet = walletFindOne($data,false);
+        $wallet = walletFindOne(false,false);
+        
         $detiens = false;
         foreach($wallet as $crypto){
             if($crypto['crypto_name']==$data['crypto_name']){
+                $data['email'] = $crypto['email'];
                 $data['transaction_type']="sell";
                 $bool = transactionAdd($data);
                  $detiens= true;
@@ -105,6 +103,10 @@ function sell($data){
         echo json_encode(["DBError"=> "erreur logique sell crypto."]);
         return;
     }
+}
+
+function findOneWalletInfo(){
+   return walletFindOne(true,true);
 }
 
 ?>

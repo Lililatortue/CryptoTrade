@@ -6,17 +6,18 @@ require_once "../dbdata/config.php";
   la quantite acheter
 
 */
-function walletFindOne($data,$return=true){      
+function walletFindOne($return=false,$fullview=false){      
     $db = DatabaseConnection::getInstance();
-    // $token = validateToken();       
-    //     if(empty($token)){
-    //         http_response_code(401);
-    //         echo json_encode(["InvalidCredential" => "Invalid credential"]);
-    //         return;
-    //     }
+    $token = validateToken(false);     
+         if(empty($token)){
+            http_response_code(401);
+             echo json_encode(["InvalidCredential" => "Invalid credential"]);
+             return;
+        }
     try{
-        $stmt=$db->getConnection()->prepare("SELECT * FROM portefeuille WHERE user_email=:email");
-        $stmt->execute([":email"=> $data['email']]);
+        $stmt=$db->getConnection()->prepare("SELECT * FROM". (($fullview == false) ?  " portefeuille " : " v_portefeuille_complet ") .
+                                            "WHERE user_email=:email");
+        $stmt->execute([":email"=> $token->email]);
 
         $wallet=$stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -38,9 +39,10 @@ function walletFindOne($data,$return=true){
     } else {
         if($return === true){
             http_response_code(404);
-            echo json_encode(["noDataFound"=>"no data found"]) ;
+            echo json_encode(["noDataFound"=>"no data found"]);
+            return false;
         }   
-        return false;
+        
     }
 }
 

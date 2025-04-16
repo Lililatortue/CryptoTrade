@@ -14,10 +14,10 @@ function cryptoController($data,$route){
                                     return updateCrypto($data);},$_SERVER['REMOTE_ADDR'],$_SERVER['HTTP_USER_AGENT'],$route);
                                     exit;
         case "GET/crypto/fetchAll": $logger->log(function() use ($data){
-                                    return fetchAllCrypto();},$_SERVER['REMOTE_ADDR'],$_SERVER['HTTP_USER_AGENT'],$route);
+                                    return fetchAllCrypto(true);},$_SERVER['REMOTE_ADDR'],$_SERVER['HTTP_USER_AGENT'],$route);
                                     exit;
         case "GET/crypto/findOne":  $logger->log(function() use ($data){
-                                    return findOneCrypto($data);},$_SERVER['REMOTE_ADDR'],$_SERVER['HTTP_USER_AGENT'],$route);
+                                    return findOneCrypto($data, true);},$_SERVER['REMOTE_ADDR'],$_SERVER['HTTP_USER_AGENT'],$route);
                                     exit;
     }
 }

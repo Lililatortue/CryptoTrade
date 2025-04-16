@@ -1,11 +1,7 @@
 function setCookie(name, value, hours){
-    console.log("starting");
-    const json = JSON.stringify(value);
-    const encodedjson = encodeURIComponent(json);
-    const date = new Date();
-    date.setTime(date.getTime() + ( 60 * 60 * 1000));
-    document.cookie = name + "=" + encodedjson + ";" + hours + ";path=/";
-    console.log("finish");
+    const encodedValue = encodeURIComponent(value);
+    const expires = new Date(Date.now() + hours * 60 * 60 * 1000).toUTCString();
+    document.cookie = `${name}=${encodedValue}; expires=${expires}; path=/`;
 }
 
 function getCookie (name) {
@@ -13,5 +9,5 @@ function getCookie (name) {
     const cookie = cookies.find(c => c.startsWith(name + '='));
     if (!cookie) return null;
     const value = decodeURIComponent(cookie.split('=')[1]);
-    return JSON.parse(value);
+    return value;
 }

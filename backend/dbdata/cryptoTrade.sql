@@ -36,8 +36,10 @@ create table transaction(
     user_email VARCHAR(150) not null,
     crypto_name VARCHAR(50) not null,
     quantite int not null,
+    montant int not null,
     transaction_type VARCHAR(10) not null,
     transaction_date DATE DEFAULT CURRENT_TIMESTAMP,
+    --faut rajouter la valeur de la crypto-->
     constraint FK_user_id    Foreign key (user_email) REFERENCES utilisateur(email),
     constraint FK_crypto_id  Foreign key (crypto_name) REFERENCES crypto(name)
 )
@@ -51,26 +53,25 @@ CREATE TABLE historique(
     Constraint FK_historique_crypto_name FOREIGN KEY (crypto_name) REFERENCES crypto(name)
 );
 --vue contient le resultat des requete preparer--
-create view v_transaction(
+create view v_portefeuille_complet AS
     SELECT  
-        t.id AS trans_id,
+        p.user_email,
+        p.crypto_name, 
+        p.quantite,
+        c.price_usd
+    From  portefeuille p
+    JOIN  crypto c       ON p.crypto_name = c.name;
+
+create view v_transaction_complet AS
+    SELECT  
+        t.crypto_name, 
         t.quantite,
+        t.montant,
         t.transaction_type,
         t.transaction_date,
-        u.id as user_id,
-        u.username,
-        c.id AS crypto_id,
-        c.crypto_name,
-        c.valeur,
-        p.id AS porte_id
-        p.trans_id
+        c.price_usd
     From  transaction t
-    JOIN  user u         ON t.user_id = u.id;
-    JOIN  crypto c       ON t.crypto_id = c.crypto_id;
-    JOIN  portefeuille p ON t.trans_id = p.trans_id;
-    
-)
-
+    JOIN  crypto c       ON t.crypto_name = c.name;
 
 
 

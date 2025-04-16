@@ -4,8 +4,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Wallet - CryptoTrade</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/userWallet.css"> 
+                    <!--script for api communication-->
+        <script src="../../frontend/js/api/ApiConnection.js" ></script>
+                <!--script error pour le error handling -->
+        <link rel="stylesheet" href="../../frontend/errorhandling/error-css.css"> 
+        <script src="../../frontend/errorhandling/ServerError.js" ></script>
+
+                <!--script error pour le error handling -->
+        <script src="../../frontend/cookies/cookieHandler.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        //static request
+        const tokenvalidation = new ApiConnection("/session/validateToken");
+        const portefeuilleFetch = new ApiConnection("/wallet/findOne");
+        const transactionFetch = new ApiConnection("/transaction/findOne");
+
+        //recursive request
+        //const graphique = new ApiConnection("/session/validateToken");
+        //const recursive_graphique = new BiDirectionnalCommunication(graphique,30000);
+        const token = getCookie('Token');
+      
+        //variable
+        tokenvalidation.getRequest((error,response)=>{
+            if(error){
+                window.location.href="pageLogin.html";
+            } else {
+                const input = document.getElementById("sidebar");
+                input.innerHTML += "<a href='adminDashboard.html'>CryptoMarket</a>";
+            }
+        },{"Authorization": `Bearer ${token}`});
+
+        var soldeTotal = document.getElementById("solde-total");
+        var dataWallet = document.getElementById("wallet-table-body");
+        portefeuilleFetch.getRequest((error,response)=>{
+            if(error){
+                //faut creer un modal si il a rien
+            } else {
+                let total=0;
+                let row = "";
+                    response.forEach(wallet => {
+                         row += `
+                            <tr>
+                                <td>${wallet.crypto_name}</td>
+                                <td>${wallet.quantite.toLocaleString()}</td>
+                                <td>$${wallet.price_usd.toLocaleString()}</td>
+                                <td>${(total+=(wallet.price_usd * wallet.quantite)).toLocaleString()}</td>
+                            </tr>`;
+                    });
+                    soldeTotal.innerHTML = total;
+                    dataWallet.innerHTML = row;
+            }
+        },{"Authorization": `Bearer ${token}`});
+       
+        var dataTransaction = document.getElementById("transaction-table-body");
+        transactionFetch.getRequest((error,response)=>{
+            if(error){
+
+            } else {
+
+                let row = "";
+                response.forEach(transaction => {
+                    row += `
+                    <tr>
+                        <td>${transaction.crypto_name}</td>
+                        <td>${transaction.quantite.toLocaleString()}</td>
+                        <td>$${transaction.montant}</td>
+                        <td>${transaction.transaction_date}</td>
+                        <td>$${transaction.transaction_type}</td>
+                    </tr>`;
+                });
+                dataTransaction.innerHTML = row;
+            }
+          },{"Authorization": `Bearer ${token}`});
+
+        // var dataCrypto = document.getElementById("cryptoChart");
+        // recursive_graphique.postRequest((error,response)=>{
+        //     if(error){
+
+        //     } else {
+
+        //     }
+        // },{Authorization: `Bearer ${getCookie('Token')}`});
+
+      });
+    </script>
 </head>
 <body>
 
@@ -17,80 +103,64 @@
         </div>
     </div>
 
-    <div class="sidebar">
+    <div id="sidebar" class="sidebar">
         <a href="../html/userDashboard.html">Dashboard</a>
         <a href="../html/userWallet.html">Wallet</a>
         <a href="#">Market</a>
-        <a href="#">Transactions</a>
         <a href="#">Settings</a>
         <a href="#">Logout</a>
     </div>
-
-    <div class="main-content">
-        <h2>Mon Portefeuille</h2>
-
-        <div class="wallet">
-            <h3>Solde Total</h3>
-            <p>$40,650.00</p>
+    <div class="main-content" >
+        <div class="container ">
+            <div class="d-flex flex-wrap justify-content-between gap-4">
+                <!-- First Column -->
+                <div class="flex-fill" style="min-width: 300px; max-width: 48%;">
+                    <h2>Mon Portefeuille</h2>
+                    <div class="wallet">
+                        <h3>Solde Total</h3>
+                        <p id="solde-total">$40,650.00</p>
+                    </div>
+                    <table class="wallet-table">
+                        <thead>
+                            <tr>
+                                <th>crypto name</th>
+                                <th>quantite</th>
+                                <th>Prix unitaire</th>
+                                <th>Valeur totale</th>
+                            </tr>
+                        </thead>
+                        <tbody id="wallet-table-body"></tbody>
+                    </table>
+                </div>
+        
+                <!-- Second Column -->
+                <div class="flex-fill" style="min-width: 300px; max-width: 48%;">
+                    <h2>Mes Transactions Récentes</h2>
+                <div class="d-flex justify-content-start gap-3 flex-wrap">
+                    <div class="wallet" style="width: 48%">
+                        <h3>achat</h3>
+                        <p>$40,650.00</p>
+                    </div>
+                    <div class="wallet" style="width: 48%">
+                        <h3>vente</h3>
+                        <p>$40,650.00</p>
+                    </div>
+                </div>
+                    <table class="transaction-table">
+                        <thead>
+                            <tr>
+                                <th>Crypto</th>
+                                <th>Quantite</th>
+                                <th>Montant</th>
+                                <th>date</th>
+                                <th>type</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transaction-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
-        <table class="crypto-table">
-            <thead>
-                <tr>
-                    <th>Symbole</th>
-                    <th>Nom</th>
-                    <th>Quantité</th>
-                    <th>Prix unitaire</th>
-                    <th>Valeur totale</th>
-                </tr>
-            </thead>
-            <tbody id="wallet-table-body">
-                <!-- Data loaded dynamically -->
-            </tbody>
-        </table>
-    </div>
-
-    <script>
-        const walletData = [
-            {
-                symbole: "BTC",
-                name: "Bitcoin",
-                quantity: 0.35,
-                price: 65000
-            },
-            {
-                symbole: "ETH",
-                name: "Ethereum",
-                quantity: 5.2,
-                price: 3500
-            },
-            {
-                symbole: "USDT",
-                name: "Tether",
-                quantity: 1500,
-                price: 1.00
-            }
-        ];
-
-        function loadWalletTable() {
-            const tbody = document.getElementById("wallet-table-body");
-
-            walletData.forEach(asset => {
-                const total = (asset.quantity * asset.price).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-                const row = `
-                    <tr>
-                        <td>${asset.symbole}</td>
-                        <td>${asset.name}</td>
-                        <td>${asset.quantity}</td>
-                        <td>$${asset.price.toLocaleString()}</td>
-                        <td>$${total}</td>
-                    </tr>
-                `;
-                tbody.innerHTML += row;
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', loadWalletTable);
-    </script>
 </body>
 </html>

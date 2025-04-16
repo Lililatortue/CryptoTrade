@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crypto Trading Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
                     <!--script for api communication-->
             <script src="../../frontend/js/api/ApiConnection.js" ></script>
 
@@ -23,20 +24,23 @@
             //variable valeur du 
             var username = document.getElementById("username"); 
             var tableBody = document.getElementById("crypto-table-body");
+
+            const token = getCookie("Token");
             //token validation et donner des options dependament des roles
-            tokenvalidation.getToken((error,response)=>{
+            tokenvalidation.getRequest((error,response)=>{
                 if(error){
                     console.log(error);
                     window.location.href="pageLogin.html";
-                } else {
+                } else {  
                     username.innerHTML = response.username;
-                    if(response.role){//should be admin mais pour tester je les elver
-                        
+                    if(response.role === "admin"){
                         const input = document.getElementById("sidebar");
                         input.innerHTML += "<a href='adminDashboard.html'>CryptoMarket</a>";
                     }
                 }
-            });
+            },{'Authorization': `Bearer ${token}`});
+
+
             //load table
             cryptoFetch.getRequest((error,response)=>{
                 if(error){
@@ -58,8 +62,7 @@
                     });
                     tableBody.innerHTML = row;
                 }
-            });
-            
+            });     
         });
     </script>
 </head>

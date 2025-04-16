@@ -14,7 +14,7 @@ function sessionController($data,$route){
                                    exit;
 
         case "GET/session/validateToken":$logger->log(function() use ($data) {
-                                         return validateToken();}, $_SERVER['REMOTE_ADDR'],$_SERVER['HTTP_USER_AGENT'],$route);
+                                         return validateToken(true);}, $_SERVER['REMOTE_ADDR'],$_SERVER['HTTP_USER_AGENT'],$route);
                                          exit;
     }
 }

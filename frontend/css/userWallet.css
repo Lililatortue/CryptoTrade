@@ -64,7 +64,7 @@ body {
 }
 
 /* Wallet Summary */
-.wallet {
+.wallet , .transaction{
     background-color: #1e1e1e;
     padding: 20px;
     border-radius: 8px;
@@ -72,20 +72,20 @@ body {
     margin-bottom: 30px;
 }
 
-.wallet h3 {
+.wallet, .transaction h3 {
     margin-top: 0;
     color: #ccc;
     font-weight: 500;
 }
 
-.wallet p {
+.wallet, .transaction p {
     font-size: 24px;
     color: #00cc88;
     font-weight: bold;
 }
 
 /* Table */
-.crypto-table {
+.wallet-table, .transaction-table {
     width: 100%;
     border-collapse: collapse;
     background-color: #1e1e1e;
@@ -94,13 +94,13 @@ body {
     box-shadow: 0 5px 10px rgba(0,0,0,0.3);
 }
 
-.crypto-table thead {
+.wallet-table thead, .transaction-table thead {
     background-color: #00cc88;
     color: #121212;
 }
 
-.crypto-table th,
-.crypto-table td {
+.wallet-table th, .transaction-table th,
+.wallet-table th, .transaction-table td {
     padding: 12px 16px;
     text-align: left;
     border-bottom: 1px solid #333;

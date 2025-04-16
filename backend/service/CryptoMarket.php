@@ -47,9 +47,8 @@ logMessage("20min have passed");
     var_dump($allCrypto);
     foreach($allCrypto as $crypto){
         $bool1=updatePriceCrypto($db,$crypto);
-        logMessage("INSERT pour {$crypto['name']} à {} avec prix {$crypto['price_usd']}");
         $bool2=HistoriqueAdd($db,$crypto);
-        logMessage("Ajout historique: {$crypto['name']} à " . date('Y-m-d H:i:s'));
+
         if (!$bool1 || !$bool2) {
             $succes = false;
             break;

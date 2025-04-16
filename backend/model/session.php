@@ -36,31 +36,42 @@ function login($data){
 }
 
 function validateToken($restult=false){
-    $header = apache_request_headers();
     $jwt = null;
-    if(isset($header['Authorization'])){
-        $authHeader = $header['Authorization'];
-        if (preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
-            $jwt = $matches[1]; // Extract the token part
-        }
-    } 
+    $headers = apache_request_headers();
+
+    $authHeader = $headers['Authorization'] ?? null;
+
+    if ($authHeader && preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
+        $jwt = $matches[1];
+    }
+    //only way i found ;/
+    if (!$jwt && isset($_COOKIE['Token'])) {
+        $jwt = $_COOKIE['Token'];
+    }
 
     if (empty($jwt)) {
-        http_response_code(401);
-        echo json_encode(['error' => 'aucun token']);
+        if ($restult === true) {
+            http_response_code(401);
+            echo json_encode(['error' => 'aucun token']);
+        }
         return;
     }
 
     $key = 'clee_super_secrete';
     try{
         $decoded = JWT::decode($jwt,new Key($key,'HS256'));
-        http_response_code(200);
-        if($restult == true)
+        
+        if($restult == true){
+            http_response_code(200);
             echo json_encode($decoded);
+        }
+            
         return $decoded;
     } catch(Exception $e){
-        http_response_code(401);
-        echo json_encode(['error'=>"Unauthorize"]);
+        if($restult == true){
+            http_response_code(401);
+            echo json_encode(['error'=>"Unauthorize"]);
+        }
         return;
     }
     
