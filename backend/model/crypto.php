@@ -80,7 +80,7 @@
         }
         
         try{
-            $stmt = $db->getConnection()->prepare("SELECT * FROM crypto WHERE crypto_name = :crypto_name");
+            $stmt = $db->getConnection()->prepare("SELECT * FROM crypto WHERE name = :crypto_name");
             $stmt -> execute([":crypto_name"=>$data['crypto_name']]);
             $crypto=$stmt->fetch(PDO::FETCH_ASSOC);
         } catch(Exception $e){

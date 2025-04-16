@@ -16,19 +16,22 @@ function buy($data){
     try{   
         //TODO::inclure strip
 
-        $wallet = walletFindOne(false,false);
+        $wallet = walletFindOne(false,false);//premier bool pour envoyer un json 2ei pour chercher des informations d'une view
         $detiens = false;
+        
         $data['email'] = $token->email;
+        //prendre le montant dont la crypto vaux
+        $crypto = findOneCrypto($data,false);
+        $data['montant']=$crypto['price_usd']; 
         foreach($wallet as $crypto){
             if($crypto['crypto_name']==$data['crypto_name']){
                  $detiens= true;
-                
-                 $data['transaction_type']="buy";
-                 $bool = transactionAdd($data);
                  $data['qte']+=$crypto['quantite'];
                 break;
             }
         }
+        $data['transaction_type']="buy";
+        $bool = transactionAdd($data);
         if ($detiens) {
             $bool = walletUpdate($data);
         } else {
@@ -55,13 +58,22 @@ function buy($data){
 
 function sell($data){
     $db = DatabaseConnection::getInstance();
+    $token = validateToken(false);       
+         if(empty($token)){
+             http_response_code(401);
+             echo json_encode(["InvalidCredential" => "Invalid credential"]);
+             return;
+         }
     try{
-        $wallet = walletFindOne(false,false);
+        $wallet = walletFindOne(false,true);
         
         $detiens = false;
+        $data['email'] = $token->email;
+         //prendre le montant dont la crypto vaux
+         $crypto = findOneCrypto($data,false);
+         $data['montant']=$crypto['price_usd'];
         foreach($wallet as $crypto){
-            if($crypto['crypto_name']==$data['crypto_name']){
-                $data['email'] = $crypto['email'];
+            if($crypto['crypto_name']==$data['crypto_name']){  
                 $data['transaction_type']="sell";
                 $bool = transactionAdd($data);
                  $detiens= true;

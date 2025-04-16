@@ -3,11 +3,12 @@ function transactionAdd($data){
     $db = DatabaseConnection::getInstance();
 
     try{
-        $stmt = $db->getConnection() -> prepare(" INSERT INTO transaction (user_email, crypto_name, quantite, transaction_type)
-                                                  VALUES (:user_email, :crypto_name, :quantite, :transaction_type)");
+        $stmt = $db->getConnection() -> prepare(" INSERT INTO transaction (user_email, crypto_name, quantite, montant, transaction_type)
+                                                  VALUES (:user_email, :crypto_name, :quantite,:montant, :transaction_type)");
         $bool = $stmt -> execute([":user_email"=>$data["email"],
                                   ":crypto_name"=>$data["crypto_name"],
                                   ":quantite"=>$data['qte'],
+                                  ":montant"=>$data["montant"],
                                   ":transaction_type"=>$data['transaction_type'],]);
     } catch(Exception $e){
         http_response_code(500);
