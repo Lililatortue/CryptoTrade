@@ -60,21 +60,19 @@ class Parser{
                 case "==": $fonction = fn($val)=> $val==$queue->pop();
                            $queue->push($fonction); break;
                     
-                case "=>": $fonction = fn($val)=> $val=>$queue->pop();
+                case "=>": $fonction = fn($val)=> $val>=$queue->pop();
                            $queue->push($fonction); break;
                     
-                case"=<":  $fonction = fn($val)=> $val=<$queue->pop();break; 
+                case"=<":  $fonction = fn($val)=> $val<=$queue->pop();break; 
                            $queue->push($fonction); break;
                 }
              } 
             else if($action['type']=="ALSO"){
-                $fonction = fn($val1,$val2)=> $val2
+                $fonction = fn($val1,$val2)=> $val2;
             } 
             }
         }
-
     }
-}
 
 $token=new Tokenizer();
 $parser=new Parser();
