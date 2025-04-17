@@ -33,9 +33,10 @@
             "badRequest":"Invalide credential",
             "error":"Invalide credential"
             }
+            const token=getCookie('Token');
             const errorhandling = new ServerErrorHandling(errorMessages);
             //token validation et donner des options dependament des roles
-            tokenvalidation.getToken((error,response)=>{
+            tokenvalidation.getRequest((error,response)=>{
                 if(error){
                     console.log(error);
                     window.location.href="pageLogin.html";
@@ -47,7 +48,7 @@
                         //input.innerHTML += "<a href='adminDashboard.html'>CryptoMarket</a>";
                     }
                 }
-            });
+            },{'Authorization': `Bearer ${token}`});
 
             //fetch request pour chercher les utilisateurs
             userFetch.getRequest((error,response)=>{

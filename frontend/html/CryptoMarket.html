@@ -33,7 +33,7 @@
                     window.location.href="pageLogin.html";
                 } else {  
                     username.innerHTML = response.username;
-                    if(response.role === "admin"){
+                    if(response.role ){
                         const input = document.getElementById("sidebar");
                         input.innerHTML += "<a href='adminDashboard.html'>CryptoMarket</a>";
                     }
